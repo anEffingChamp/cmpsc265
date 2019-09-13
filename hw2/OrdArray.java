@@ -67,12 +67,27 @@ public void display() {             // displays array contents
   System.out.println("");
 }
 //-----------------------------------------------------------
+/*
+ * Implement the merge()method to the OrdArray class so that you can merge two
+ * ordered arrays into an ordered destination array and return that array
+ */
+public int[] merge(OrdArray arr)
+{
+    int outputLength = nElems + arr.a.length;
+    long[] output    = new long[outputLength];
+    for (int loop = 0;
+    loop < outputLength;
+    loop++
+    ) {
 
-public int[] merge(OrdArray arr){
- // YOUR CODES
- return null;
+    }
+    return null;
 }
-
+/*
+ * Write code in the main()method to create two ordered arrays with arbitrary
+ * values, invoke the merge()method, and display the contents of the resulting
+ * destination array.
+ */
 public static void main(String[] args){
  // YOUR CODES
 }
