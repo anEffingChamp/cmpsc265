@@ -8,7 +8,6 @@ public HighArray(int max)  {       // constructor
   nElems = 0;                        // no items yet
 }
 //-----------------------------------------------------------
-
 public boolean find(long searchKey) { // find specified value
   int j;
   for(j=0; j<nElems; j++)            // for each element,
@@ -48,12 +47,62 @@ public void display() {             // displays array contents
  System.out.println("");
 }
 //-----------------------------------------------------------
-
-public int removeMax() {
- // YOUR CODES
- return -1;  // this is to get the program successfully compiled. You need to change it.
+/*
+ * You are expectedto implement the removeMax()method, so that the item in the
+ * array with the largest value can be returned, and it will also be removed
+ * from the array.  Return -1 if the array is empty.If there are duplicate
+ * maximum values, please remove all of them.
+ */
+public long removeMax()
+{
+    long highValue  = Long.MIN_VALUE;
+    int[] highIndex = new int[nElems];
+    int highCount   = 0;
+    /*
+     * We loop once to find the highest value in the array. We note its value,
+     * and its position.
+     */
+    for (int loop = 0;
+    loop < nElems;
+    loop++
+    ) {
+        if (highValue < a[loop]) {
+            highValue    = a[loop];
+            highIndex    = new int[nElems - loop];
+            highCount    = 0;
+            highIndex[0] = loop;
+        }
+        if (highValue == a[loop]) {
+            highCount++;
+            highIndex[highCount] = loop;
+        }
+    }
+    /*
+     * We exit early if the array was never initialized with any values.
+     */
+    if (0      == highValue
+    &&  nElems == highCount
+    ) {
+        return -1;
+    }
+    /*
+     * Now we can overwrite it with the subsequent value, and move all other
+     * values one index lower in the array. Then we decrement nElems since the
+     * last value is no longer meaningful.
+     */
+    int nextValue = 1;
+    for (int loop = highIndex[0];
+    loop < nElems;
+    loop++
+    ) {
+        if (highValue == a[loop + nextValue]) {
+            nextValue++;
+        }
+        a[loop] = a[loop + nextValue];
+    }
+    nElems = nElems - highCount;
+    return highValue;
 }
-
 public static void main(String[] args) {
  int maxSize = 100;            // array size
  HighArray arr;                // reference to array
