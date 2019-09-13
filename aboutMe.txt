@@ -1,0 +1,50 @@
+Jonathan Smalls                                 Zaihan Yang
+Homework 1                                      CMPSC-F265-A
+2019 September 13                               Data Structures and Algorithms
+
+In this very first homework, you are expected tocreate a .txt file that contains
+the following information about yourself.
+
+•The full spelling of your name, and how would you like to be addressed?
+
+    Jonathan Smalls, you can call me Jon.
+
+•What is your major and current grade?
+
+    major: computer science
+    grade: junior
+
+•Have you had any programming experience before? If so, please describe your
+experience briefly.
+
+    I work full time as a web developer for a government agency. I attend
+    classes part time to improve my skills as a engineer.
+
+•In your previous programming experience if you have any,
+what is the most challenging and difficult part in your opinion?  What makes you
+feel enjoyable?
+
+    Edge cases are the most challenging part of programming for me. Getting a
+    function to work under certain conditions is one thing, but accounting for
+    edge cases can be challenging.
+        I most enjoy the fact that programming is literally taking an
+    unopinionated machine, and teaching it to make life easier for a living,
+    breathing human being. I think that that part is fantastic.
+
+•What is you career goal?
+
+    I want to make a lot of money without a lot of stress.
+
+•Tell me a little bit more about yourself.
+
+    My minor is theater. I like to make art with my friends when I am not
+    developing. I also enjoy carpentry and environmental science quite a lot.
+
+•If you have a job, how many hours a week do you need to work.
+
+    I work 40 hours weekly.
+
+•How many courses are you taking this semester, and how many of them are math/engineering related course.
+
+    I am enrolled in two classes. This is the only engineering course. The other
+    is an acting class related to my minor.
