@@ -71,25 +71,33 @@ public void display() {             // displays array contents
  * Implement the merge()method to the OrdArray class so that you can merge two
  * ordered arrays into an ordered destination array and return that array
  */
-public int[] merge(OrdArray arr)
+public long[] merge(OrdArray arr)
 {
-    int outputLength = nElems + arr.a.length;
+    long[] input     = arr.a;
+    int outputLength = nElems + arr.size();
     long[] output    = new long[outputLength];
+    int[] inputIndex = new int[2];
     for (int loop = 0;
     loop < outputLength;
     loop++
     ) {
-
+        if (a[inputIndex[0]] < input[inputIndex[1]]) {
+            output[loop] = a[inputIndex[0]];
+            inputIndex[0]++;
+        } else {
+            output[loop] = input[inputIndex[1]];
+            inputIndex[1]++;
+        }
     }
-    return null;
+    return output;
 }
 /*
  * Write code in the main()method to create two ordered arrays with arbitrary
  * values, invoke the merge()method, and display the contents of the resulting
  * destination array.
  */
-public static void main(String[] args){
+public static void main(String[] args)
+{
  // YOUR CODES
 }
-
 }  // end class OrdArray
