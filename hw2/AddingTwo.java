@@ -92,14 +92,11 @@ public int[] add(long input)
     loop < this.nElems;
     loop++
     ) {
-        for (int innerLoop = loop + 1;
-        innerLoop < this.nElems;
-        innerLoop++
-        ) {
-            if (this.a[loop] + this.a[innerLoop] == input) {
-                output[0] = loop;
-                output[1] = innerLoop;
-            }
+        int result = this.find(input - this.a[loop]);
+        if (this.nElems != result) {
+            output[0] = loop;
+            output[1] = result;
+            break;
         }
     }
     return output;
