@@ -1,3 +1,4 @@
+import java.util.Scanner;
 /*
  * Please write aJavaprogram to first read in an array of integerswith elements
  * obtained from keyboard.  Make sure all the inputs are in ascending order, so
@@ -10,12 +11,10 @@ public class AddingTwo
 {
 private long[] a;                 // ref to array a
 private int nElems;               // number of data items
-
-//-----------------------------------------------------------
 public AddingTwo(int max)
 {          // constructor
- a = new long[max];             // create array
- nElems = 0;
+    a      = new long[max];             // create array
+    nElems = 0;
 }
 //-----------------------------------------------------------
 
@@ -84,7 +83,7 @@ public void display() {             // displays array contents
  * -Return {-1, -1} if no such two elements exist.
  * -If there ismore than one solution, return any one should be good.
  */
-public void AddingTwo()
+public void addTwo()
 {
 }
 /*
@@ -96,5 +95,18 @@ public void AddingTwo()
  */
 public static void main(String[] args)
 {
+    Scanner userInput = new Scanner(System.in);
+    System.out.print("How many elements in the array?: ");
+    int arraySize     = userInput.nextInt();
+    AddingTwo addingTwo  = new AddingTwo(arraySize);
+    for (int loop = 0;
+    loop < arraySize;
+    loop++
+    ) {
+        System.out.print("Please enter one element's value: ");
+        addingTwo.insert(userInput.nextLong());
+    }
+    System.out.print("Please enter a target value: ");
+
 }
-}  // end class OrdArray
+}
