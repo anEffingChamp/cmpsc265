@@ -83,8 +83,12 @@ public void display() {             // displays array contents
  * -Return {-1, -1} if no such two elements exist.
  * -If there ismore than one solution, return any one should be good.
  */
-public void addTwo()
+public int[] addTwo(long input)
 {
+    int[] output = new int[2];
+    output[0]    = -1;
+    output[1]    = -1;
+    return output;
 }
 /*
  * 1)Please read in an array of integers of arbitrary lengths and elements from
@@ -107,6 +111,6 @@ public static void main(String[] args)
         addingTwo.insert(userInput.nextLong());
     }
     System.out.print("Please enter a target value: ");
-
+    System.out.print("index: " + addingTwo.addTwo(userInput.nextLong()));
 }
 }
