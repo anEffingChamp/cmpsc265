@@ -80,6 +80,10 @@ private int compareString(char[] thisName, char[] inputName)
     }
     return -1; // This is for compilation.  You need to change it.
 }
+public boolean compareGPA(Student input)
+{
+    return this.gpa <= input.gpa;
+}
 //Implement the following method, so that students can be sorted by their
 //lastname
 public int compareTo(Student input)
@@ -89,7 +93,6 @@ public int compareTo(Student input)
         input.lastName.toCharArray()
     );
 }
-
   // Constructor
   public Student(String fn, String ln, String major, double gpa) {
     this.firstName = fn;
@@ -121,7 +124,7 @@ public static void display(Student[] input)
         );
     }
 }
-  public static void main(String[] args) {
+public static void main(String[] args) {
     ArrayList<Student> list = new ArrayList<Student>();
     list.add(new Student("Ellen", "Smith", "cs", 3.78));
     list.add(new Student("Ava", "Johnson", "math", 3.92));
@@ -144,8 +147,23 @@ public static void display(Student[] input)
     System.out.println();
     // Sort students by their GPA and display all students.
     System.out.println("Sort students by their GPA (from highest to lowest):");
+    Student.display(Student.sortGPA(list.toArray(new Student[list.size()])));
     System.out.println();
-  }
+}
+public static Student[] sortGPA(Student[] input)
+{
+    Student[] output = loopArray(input, 0, input.length - 2, "gpa");
+    output           = loopArray(input, 1, input.length - 1, "gpa");
+    for (int loop  = 0;
+    loop          <= output.length - 2;
+    loop          += 2
+    ) {
+        if (false == output[loop].compareGPA(output[loop + 1])) {
+            Student.sortGPA(output);
+        }
+    }
+    return output;
+}
 public static Student[] sortMajor(Student[] input)
 {
     Student [] output = loopArray(input, 0, input.length - 2, "major");
@@ -191,7 +209,7 @@ public static Student[] sort(Student[] input)
     }
     return output;
 }
-public static Student[] loopArray(
+private static Student[] loopArray(
     Student[] array,
     int loopStart,
     int loopEnd,
@@ -206,47 +224,35 @@ public static Student[] loopArray(
             break;
         }
         switch (loopField) {
+        case "gpa":
+            if (false == output[loop].compareGPA(output[loop + 1])) {
+                output = Student.swapElements(output, loop);
+            }
+            break;
         case "major":
             if (0 == output[loop].compareMajor(output[loop + 1])) {
-                Student valueTemporary = output[loop];
-                output[loop]           = output[loop + 1];
-                output[loop + 1]       = valueTemporary;
+                output = Student.swapElements(output, loop);
             }
             break;
         case "firstName":
             if (0 == output[loop].compareFirst(output[loop + 1])) {
-                Student valueTemporary = output[loop];
-                output[loop]           = output[loop + 1];
-                output[loop + 1]       = valueTemporary;
+                output = Student.swapElements(output, loop);
             }
             break;
         default:
             if (0 == output[loop].compareTo(output[loop + 1])) {
-                Student valueTemporary = output[loop];
-                output[loop]           = output[loop + 1];
-                output[loop + 1]       = valueTemporary;
+                output = Student.swapElements(output, loop);
             }
         }
     }
     return output;
 }
-}
-
-//Finish implementing the following class, so that students can be sorted by their firstname
-class FirstNameCompare implements Comparator<Student>
+private static Student[] swapElements(Student[] input, int loop)
 {
-public int compare(Student inputFirst, Student inputSecond)
-{
-    return -1;
+    Student[] output = input;
+    Student valueTemporary = output[loop];
+    output[loop]           = output[loop + 1];
+    output[loop + 1]       = valueTemporary;
+    return output;
 }
 }
-
-//Finish implementing the following class, so that students can be sorted by their major
-//class MajorCompare implements Comparator<Student> {
-  // YOUR CODES
-//}
-
-//Finish implementing the following class, so that students can be sorted by their GPA
-//class GPACompare implements Comparator<Student> {
-  // YOUR CODES
-//}
