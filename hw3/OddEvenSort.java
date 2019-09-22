@@ -12,9 +12,39 @@ import java.util.*;
  */
 class OddEvenSort
 {
+/**
+ * sort() sorts an array of integers with the odd even sorting method.
+ */
 public static void sort(int[] arr)
 {
-// YOUR CODES
+    arr = loopArray(arr, 0, arr.length - 2);
+    arr = loopArray(arr, 1, arr.length - 1);
+    for (int loop  = 0;
+    loop          <= arr.length - 2;
+    loop          += 2
+    ) {
+        if (arr[loop] > arr[loop + 1]) {
+            OddEvenSort.sort(arr);
+        }
+    }
+}
+public static int[] loopArray(int[] array, int loopStart, int loopEnd)
+{
+    int[] output = array;
+    for (int loop  = loopStart;
+    loop          <= loopEnd;
+    loop          += 2
+    ) {
+        if (loop == output.length - 1) {
+            break;
+        }
+        if (output[loop] > output[loop + 1]) {
+            int valueTemporary = output[loop];
+            output[loop]       = output[loop + 1];
+            output[loop + 1]   = valueTemporary;
+        }
+    }
+    return output;
 }
 public static void main(String[] args)
 {
