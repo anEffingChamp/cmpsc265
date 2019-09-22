@@ -22,23 +22,26 @@ class Student implements Comparable<Student> {
   private String lastName;
   private String major;
   private double gpa;
-
-  //Implement the following method, so that students can be sorted by their lastname
-  public int compareTo(Student input)
-  {
-    /*
-     * We can not loop longer than the shorter name.
-     */
-    int loopLength = this.lastName.length();
-    if (input.lastName.length() < loopLength) {
-        loopLength = input.lastName.length();
-    }
+public int compareFirst(Student input)
+{
     /*
      * We also need to convert the strings to arrays so that we can loop through
      * each character for comparison.
      */
-    char[] thisName  = this.lastName.toCharArray();
-    char[] inputName = input.lastName.toCharArray();
+    return this.compareString(
+        this.firstName.toCharArray(),
+        input.firstName.toCharArray()
+    );
+}
+private int compareString(char[] thisName, char[] inputName)
+{
+    /*
+     * We can not loop longer than the shorter name.
+     */
+    int loopLength = thisName.length;
+    if (inputName.length < loopLength) {
+        loopLength = inputName.length;
+    }
     for (int loop = 0;
     loop < loopLength;
     loop++
@@ -66,7 +69,16 @@ class Student implements Comparable<Student> {
         }
     }
     return -1; // This is for compilation.  You need to change it.
-  }
+}
+//Implement the following method, so that students can be sorted by their
+//lastname
+public int compareTo(Student input)
+{
+    return this.compareString(
+        this.lastName.toCharArray(),
+        input.lastName.toCharArray()
+    );
+}
 
   // Constructor
   public Student(String fn, String ln, String major, double gpa) {
@@ -109,13 +121,12 @@ public static void display(Student[] input)
 
     //YOUR CODES
     // Sort students by their lastname and display all students.
-    Student[] studentArray =
-        Student.sort(list.toArray(new Student[list.size()]));
     System.out.println("Sort students by their last name:");
-    Student.display(studentArray);
+    Student.display(Student.sort(list.toArray(new Student[list.size()])));
     System.out.println();
     // Sort students by their firstname and display all students.
     System.out.println("Sort students by their first name:");
+    Student.display(Student.sortFirst(list.toArray(new Student[list.size()])));
     System.out.println();
     // Sort students by their major and display all students.
     System.out.println("Sort students by their major:");
@@ -124,13 +135,27 @@ public static void display(Student[] input)
     System.out.println("Sort students by their GPA (from highest to lowest):");
     System.out.println();
   }
+public static Student[] sortFirst(Student[] input)
+{
+    Student[] output = loopArray(input, 0, input.length - 2, "firstName");
+    output           = loopArray(input, 1, input.length - 1, "firstName");
+    for (int loop  = 0;
+    loop          <= output.length - 2;
+    loop          += 2
+    ) {
+        if (0 == output[loop].compareFirst(output[loop + 1])) {
+            Student.sortFirst(output);
+        }
+    }
+    return output;
+}
 /**
  * sort() sorts an array of Student{} with the odd even sorting method.
  */
 public static Student[] sort(Student[] input)
 {
-    Student[] output = loopArray(input, 0, input.length - 2);
-    output           = loopArray(input, 1, input.length - 1);
+    Student[] output = loopArray(input, 0, input.length - 2, "");
+    output           = loopArray(input, 1, input.length - 1, "");
     for (int loop  = 0;
     loop          <= output.length - 2;
     loop          += 2
@@ -141,8 +166,12 @@ public static Student[] sort(Student[] input)
     }
     return output;
 }
-public static Student[] loopArray(Student[] array, int loopStart, int loopEnd)
-{
+public static Student[] loopArray(
+    Student[] array,
+    int loopStart,
+    int loopEnd,
+    String loopField
+) {
     Student[] output = array;
     for (int loop  = loopStart;
     loop          <= loopEnd;
@@ -151,10 +180,20 @@ public static Student[] loopArray(Student[] array, int loopStart, int loopEnd)
         if (loop == output.length - 1) {
             break;
         }
-        if (0 == output[loop].compareTo(output[loop + 1])) {
-            Student valueTemporary = output[loop];
-            output[loop]           = output[loop + 1];
-            output[loop + 1]       = valueTemporary;
+        switch (loopField) {
+        case "firstName":
+            if (0 == output[loop].compareFirst(output[loop + 1])) {
+                Student valueTemporary = output[loop];
+                output[loop]           = output[loop + 1];
+                output[loop + 1]       = valueTemporary;
+            }
+            break;
+        default:
+            if (0 == output[loop].compareTo(output[loop + 1])) {
+                Student valueTemporary = output[loop];
+                output[loop]           = output[loop + 1];
+                output[loop + 1]       = valueTemporary;
+            }
         }
     }
     return output;
