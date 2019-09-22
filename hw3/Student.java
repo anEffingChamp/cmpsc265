@@ -98,12 +98,50 @@ class Student implements Comparable<Student> {
     // Sort students by their major and display all students.
     // Sort students by their GPA and display all students.
   }
+/**
+ * sort() sorts an array of Student{} with the odd even sorting method.
+ */
+public static void sort(Student[] input)
+{
+    input = loopArray(input, 0, input.length - 2);
+    input = loopArray(input, 1, input.length - 1);
+    for (int loop  = 0;
+    loop          <= input.length - 2;
+    loop          += 2
+    ) {
+        if (0 == input[loop].compareTo(input[loop + 1])) {
+            Student.sort(input);
+        }
+    }
+}
+public static Student[] loopArray(Student[] array, int loopStart, int loopEnd)
+{
+    Student[] output = array;
+    for (int loop  = loopStart;
+    loop          <= loopEnd;
+    loop          += 2
+    ) {
+        if (loop == output.length - 1) {
+            break;
+        }
+        if (0 == output[loop].compareTo(output[loop + 1])) {
+            Student valueTemporary = output[loop];
+            output[loop]           = output[loop + 1];
+            output[loop + 1]       = valueTemporary;
+        }
+    }
+    return output;
+}
 }
 
 //Finish implementing the following class, so that students can be sorted by their firstname
-//class FirstNameCompare implements Comparator<Student> {
-  // YOUR CODES
-//}
+class FirstNameCompare implements Comparator<Student>
+{
+public int compare(Student inputFirst, Student inputSecond)
+{
+    return -1;
+}
+}
 
 //Finish implementing the following class, so that students can be sorted by their major
 //class MajorCompare implements Comparator<Student> {
