@@ -29,9 +29,23 @@ public void push(long input)    // put item on top of stack
     stackArray[this.top] = input;
 }
 //--------------------------------------------------------------
-public long pop()           // take item from top of stack
+public void pop()           // take item from top of stack
 {
-return -1; // This is for compilation. You need to change it.
+    this.top--;
+    int sizePlaceholder = this.maxSize / 2;
+    if (this.top <= sizePlaceholder
+    &&  this.top >= 1
+    ) {
+        long[] arrayPlaceholder = new long[sizePlaceholder];
+        for (int loop = 0;
+        loop < sizePlaceholder;
+        loop++
+        ) {
+            arrayPlaceholder[loop] = this.stackArray[loop];
+        }
+        this.stackArray = arrayPlaceholder;
+        this.maxSize    = this.maxSize /  2;
+    }
 }
 //--------------------------------------------------------------
 
