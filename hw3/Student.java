@@ -22,6 +22,13 @@ class Student implements Comparable<Student> {
   private String lastName;
   private String major;
   private double gpa;
+public int compareMajor(Student input)
+{
+    return this.compareString(
+        this.major.toCharArray(),
+        input.major.toCharArray()
+    );
+}
 public int compareFirst(Student input)
 {
     /*
@@ -42,6 +49,9 @@ private int compareString(char[] thisName, char[] inputName)
     if (inputName.length < loopLength) {
         loopLength = inputName.length;
     }
+    if (thisName == inputName) {
+        return 1;
+    }
     for (int loop = 0;
     loop < loopLength;
     loop++
@@ -55,14 +65,14 @@ private int compareString(char[] thisName, char[] inputName)
          */
         if (thisName[loop] < inputName[loop]
         || (
-            loop == loopLength
+            loop == loopLength - 1
             &&  loopLength < thisName.length
         )) {
             return 1;
         }
         if (thisName[loop] > inputName[loop]
         || (
-            loop == loopLength
+            loop == loopLength - 1
             &&  loopLength < inputName.length
         )) {
             return 0;
@@ -130,11 +140,26 @@ public static void display(Student[] input)
     System.out.println();
     // Sort students by their major and display all students.
     System.out.println("Sort students by their major:");
+    Student.display(Student.sortMajor(list.toArray(new Student[list.size()])));
     System.out.println();
     // Sort students by their GPA and display all students.
     System.out.println("Sort students by their GPA (from highest to lowest):");
     System.out.println();
   }
+public static Student[] sortMajor(Student[] input)
+{
+    Student [] output = loopArray(input, 0, input.length - 2, "major");
+    output            = loopArray(input, 1, input.length - 1, "major");
+    for (int loop  = 0;
+    loop          <= output.length - 2;
+    loop          += 2
+    ) {
+        if (0 == output[loop].compareMajor(output[loop + 1])) {
+            Student.sortMajor(output);
+        }
+    }
+    return output;
+}
 public static Student[] sortFirst(Student[] input)
 {
     Student[] output = loopArray(input, 0, input.length - 2, "firstName");
@@ -181,6 +206,13 @@ public static Student[] loopArray(
             break;
         }
         switch (loopField) {
+        case "major":
+            if (0 == output[loop].compareMajor(output[loop + 1])) {
+                Student valueTemporary = output[loop];
+                output[loop]           = output[loop + 1];
+                output[loop + 1]       = valueTemporary;
+            }
+            break;
         case "firstName":
             if (0 == output[loop].compareFirst(output[loop + 1])) {
                 Student valueTemporary = output[loop];
