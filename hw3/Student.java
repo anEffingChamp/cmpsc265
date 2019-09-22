@@ -81,7 +81,24 @@ class Student implements Comparable<Student> {
   public String getFirstName() { return firstName; }
   public String getMajor() { return major; }
   public double getGPA() { return gpa; }
-
+/**
+ * display() loops through an input array of student objects, and prints them to
+ * the terminal.
+ */
+public static void display(Student[] input)
+{
+    for (int loop = 0;
+    loop < input.length;
+    loop++
+    ) {
+        System.out.println(
+            input[loop].lastName
+            + " " + input[loop].firstName
+            + " " + input[loop].major
+            + " " + input[loop].gpa
+        );
+    }
+}
   public static void main(String[] args) {
     ArrayList<Student> list = new ArrayList<Student>();
     list.add(new Student("Ellen", "Smith", "cs", 3.78));
@@ -92,27 +109,37 @@ class Student implements Comparable<Student> {
 
     //YOUR CODES
     // Sort students by their lastname and display all students.
-    Student studentPlaceholder = list.get(0);
-    System.out.println(studentPlaceholder.compareTo(list.get(1)));
+    Student[] studentArray =
+        Student.sort(list.toArray(new Student[list.size()]));
+    System.out.println("Sort students by their last name:");
+    Student.display(studentArray);
+    System.out.println();
     // Sort students by their firstname and display all students.
+    System.out.println("Sort students by their first name:");
+    System.out.println();
     // Sort students by their major and display all students.
+    System.out.println("Sort students by their major:");
+    System.out.println();
     // Sort students by their GPA and display all students.
+    System.out.println("Sort students by their GPA (from highest to lowest):");
+    System.out.println();
   }
 /**
  * sort() sorts an array of Student{} with the odd even sorting method.
  */
-public static void sort(Student[] input)
+public static Student[] sort(Student[] input)
 {
-    input = loopArray(input, 0, input.length - 2);
-    input = loopArray(input, 1, input.length - 1);
+    Student[] output = loopArray(input, 0, input.length - 2);
+    output           = loopArray(input, 1, input.length - 1);
     for (int loop  = 0;
-    loop          <= input.length - 2;
+    loop          <= output.length - 2;
     loop          += 2
     ) {
-        if (0 == input[loop].compareTo(input[loop + 1])) {
-            Student.sort(input);
+        if (0 == output[loop].compareTo(output[loop + 1])) {
+            Student.sort(output);
         }
     }
+    return output;
 }
 public static Student[] loopArray(Student[] array, int loopStart, int loopEnd)
 {
