@@ -21,23 +21,43 @@ String[] operators;
 public double evaluateInfix(String input)
 {
     this.values               = new String[2];
-    this.operators            = new String[3];
+    this.operators            = new String[100];
     StringTokenizer tokenizer = new StringTokenizer(input, " ");
     while (true == tokenizer.hasMoreTokens()) {
         String token = tokenizer.nextToken();
         switch (token) {
         case "(":
-            this.operators[0] = token;
+            for (int loop  = 0;
+            loop          <= this.operators.length - 1;
+            loop++
+            ) {
+                if (null == this.operators[loop]) {
+                    this.operators[loop] = token;
+                    break;
+                }
+            }
             break;
         case "+":
         case "-":
         case "*":
         case "/":
         case "^":
-            this.operators[1] = token;
+            this.operators[99] = token;
             break;
         case ")":
-            this.operators[2] = token;
+            for (int loop  = this.operators.length - 1;
+            loop          >= 0;
+            loop--
+            ) {
+                if ("(" == this.operators[loop]) {
+                    this.operators[loop] = null;
+                    break;
+                }
+                if (0 == loop) {
+                    System.out.println("We are missing a (");
+                    return 0;
+                }
+            }
             break;
         /*
          * We assume that the token is a number if it fails to match a known
@@ -61,7 +81,7 @@ public double evaluateInfix(String input)
 }
 double valueOperation(String firstValue, String secondValue) {
     double output = 0;
-    switch (this.operators[1]) {
+    switch (this.operators[99]) {
     case "+":
         output =
             Double.parseDouble(firstValue) + Double.parseDouble(secondValue);
