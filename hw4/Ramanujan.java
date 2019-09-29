@@ -37,6 +37,10 @@ private static class Pair implements Comparable<Pair>
 }
 public static void main(String[] args) throws Exception
 {
-    // YOUR CODES
+    PriorityQueue<String> queue = new PriorityQueue<String>();
+    System.out.print("Please enter a number: ");
+    Scanner userInput           = new Scanner(System.in);
+    int userInputValue          = userInput.nextInt();
+    System.out.println(userInputValue);
 }
 }
