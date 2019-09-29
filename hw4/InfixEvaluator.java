@@ -16,72 +16,53 @@ import java.util.*;
  */
 class InfixEvaluator
 {
-String[] values;
-String[] operators;
+Stack<String> valueStack;
+Stack<String> operatorStack;
+Stack<String> parenthesesStack;
 public double evaluateInfix(String input)
 {
-    this.values               = new String[2];
-    this.operators            = new String[100];
+    this.valueStack           = new Stack<String>();
+    this.operatorStack        = new Stack<String>();
+    this.parenthesesStack     = new Stack<String>();
     StringTokenizer tokenizer = new StringTokenizer(input, " ");
     while (true == tokenizer.hasMoreTokens()) {
         String token = tokenizer.nextToken();
         switch (token) {
         case "(":
-            for (int loop  = 0;
-            loop          <= this.operators.length - 1;
-            loop++
-            ) {
-                if (null == this.operators[loop]) {
-                    this.operators[loop] = token;
-                    break;
-                }
-            }
+            parenthesesStack.push(token);
+            break;
+        case ")":
+            // TODO What do we do with unbalanced parantheses?
+            parenthesesStack.pop();
             break;
         case "+":
         case "-":
         case "*":
         case "/":
         case "^":
-            this.operators[99] = token;
-            break;
-        case ")":
-            for (int loop  = this.operators.length - 1;
-            loop          >= 0;
-            loop--
-            ) {
-                if ("(" == this.operators[loop]) {
-                    this.operators[loop] = null;
-                    break;
-                }
-                if (0 == loop) {
-                    System.out.println("We are missing a (");
-                    return 0;
-                }
-            }
+            operatorStack.push(token);
             break;
         /*
          * We assume that the token is a number if it fails to match a known
          * arithmetic operator.
          */
         default:
-            if ("1" == this.values[1]) {
-                this.values[0] = String.valueOf(
-                    this.valueOperation(this.values[0], token)
-                );
-                this.values[1] = null;;
+            if (true == operatorStack.isEmpty()
+            &&  true == valueStack.isEmpty()
+            ) {
+                valueStack.push(token);
                 break;
             }
-            if (null == this.values[1]) {
-                this.values[0] = token;
-                this.values[1] = "1";
-            }
+            valueStack.push(
+                String.valueOf(this.valueOperation(valueStack.pop(), token))
+            );
         }
     }
-    return Double.parseDouble(this.values[0]);
+    return Double.parseDouble(this.valueStack.pop());
 }
 double valueOperation(String firstValue, String secondValue) {
     double output = 0;
-    switch (this.operators[99]) {
+    switch (this.operatorStack.pop()) {
     case "+":
         output =
             Double.parseDouble(firstValue) + Double.parseDouble(secondValue);
