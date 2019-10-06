@@ -1,5 +1,9 @@
 import java.util.Scanner;
-
+/**
+ * Description:Given a singly linked list, remove the n-th node from the end of
+ * the list.Example:Given a linked list: 1->2->3->4->5, and n=2After removing
+ * the second node from the end, the linked list would become:1->2->3->5
+ */
 public class RemoveLinkedList
 {
     private static class Link
