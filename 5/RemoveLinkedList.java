@@ -72,10 +72,18 @@ public class RemoveLinkedList
      */
     public void removeN(int input)
     {
+        /*
+         * We can exit early if the list is empty.
+         */
+        if (null == this.first) {
+            System.out.println("The list is empty.");
+            return;
+        }
         Link currentLink = this.first;
         Link linkTarget  = null;
-        int linkCount    = -1;
+        int linkCount    = 0;
         /*
+         * If not,
          * We loop through the list to count how many elements it has, and mark
          * the nth + 1 element from the end.
          */
@@ -98,18 +106,19 @@ public class RemoveLinkedList
             this.first = this.first.next;
             return;
         }
-        if (null == linkTarget) {
-            System.out.println(linkCount);
-            int outputCount = linkCount + 2;
+        if (input > linkCount
+        &&  null == linkTarget
+        ) {
+            int outputCount = linkCount + 1;
             System.out.println(
                 "There are only " + outputCount + " elements in the list."
             );
             return;
         }
-        if (0 == input) {
+        if (1 == input) {
             linkTarget.next = null;
         }
-        if (0 < input) {
+        if (1 < input) {
             linkTarget.next = linkTarget.next.next;
         }
     }
