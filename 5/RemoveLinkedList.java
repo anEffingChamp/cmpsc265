@@ -10,16 +10,11 @@ public class RemoveLinkedList
     {
     public int iData;              // data item
     public Link next;              // next link in list
-
-//-------------------------------------------------------------
     public Link(int id) // constructor
     {
       iData = id;                 // initialize data
       next =  null;
     }
-
-//-------------------------------------------------------------
-
     public void displayLink()      // display ourself
     {
       System.out.print("{" + iData + "} ");
@@ -70,9 +65,53 @@ public class RemoveLinkedList
       System.out.println("");
     }
     //-------------------------------------------------------------
-
-    public void removeN(int n){
-      // YOUR CODES
+    /**
+     * removeN() finds the nth node in a linked list, and removes it from the
+     * list. It then updates all subsequent links in the list to maintain
+     * continuity.
+     */
+    public void removeN(int input)
+    {
+        Link currentLink = this.first;
+        Link linkTarget  = null;
+        int linkCount    = -1;
+        /*
+         * We loop through the list to count how many elements it has, and mark
+         * the nth + 1 element from the end.
+         */
+        while (null != currentLink.next) {
+            linkCount++;
+            if (input < linkCount) {
+                linkTarget = linkTarget.next;
+            }
+            if (input == linkCount) {
+                linkTarget = this.first;
+            }
+            currentLink = currentLink.next;
+        }
+        /*
+         * Then we can point the linkTarget to skip the node we want to delete.
+         * We just need to be conscious of when we want to delete the last node,
+         * the first node, or when the input is greater than the total nodes.
+         */
+        if (input == linkCount + 1) {
+            this.first = this.first.next;
+            return;
+        }
+        if (null == linkTarget) {
+            System.out.println(linkCount);
+            int outputCount = linkCount + 2;
+            System.out.println(
+                "There are only " + outputCount + " elements in the list."
+            );
+            return;
+        }
+        if (0 == input) {
+            linkTarget.next = null;
+        }
+        if (0 < input) {
+            linkTarget.next = linkTarget.next.next;
+        }
     }
     }  // end class LinkList
 ////////////////////////////////////////////////////////////////
