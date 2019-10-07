@@ -62,11 +62,15 @@ public class Deque
       newLink.next = first;       // newLink --> old first
       first        = newLink;            // first --> newLink
     }
-    public Link deleteFirst()      // delete first item
+    /*
+     * removeFront()Remove and return the integer at the front
+     * from the deque
+     */
+    public Link removeFront()      // delete first item
     {                           // (assumes list not empty)
-      Link temp = first;          // save reference to link
-      first = first.next;         // delete it: first-->old next
-      return temp;                // return deleted link
+        Link temp = first;          // save reference to link
+        first     = first.next;         // delete it: first-->old next
+        return temp;                // return deleted link
     }
     public void displayList()
     {
