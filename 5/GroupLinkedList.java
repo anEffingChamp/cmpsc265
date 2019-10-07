@@ -58,8 +58,42 @@ public class GroupLinkedList
       }
       System.out.println("");
     }
-    public void group(){
-      // YOUR CODES
+    /**
+     * group() groups the odd and even nodes of a linked list such that all odd
+     * nodes are sorted first, and even numbered nodes come last. Their ranking
+     * as odd or even is determined by their initial position in the unsorted
+     * list.
+     */
+    public void group()
+    {
+        /*
+         * We can exit early if the list is empty.
+         */
+        if (null == this.first) {
+            System.out.println("The list is empty.");
+            return;
+        }
+        Link oddLink       = this.first;
+        Link evenLink      = this.first.next;
+        Link evenLinkFirst = evenLink;
+        Link currentLink   = this.first;
+        int currentCount   = 1;
+        while (null != currentLink.next) {
+            Link temporaryLink = currentLink;
+            if (1 == currentCount
+            ||  1 == currentCount % 2
+            ) {
+                System.out.println(currentCount);
+            }
+            currentLink = currentLink.next;
+            currentCount++;
+        }
+        switch (currentCount % 2) {
+        case 1:
+            System.out.println(currentCount);
+            break;
+        default:
+        }
     }
     }  // end class LinkList
 ////////////////////////////////////////////////////////////////

@@ -60,6 +60,10 @@ public class LinkedListCycle {
       }
       System.out.println("");
     }
+    /**
+     * containCycle() verifies whether the linked list contains a cycle. It
+     * returns true if so, false if not.
+     */
     public boolean containCycle()
     {
         boolean output   = true;
