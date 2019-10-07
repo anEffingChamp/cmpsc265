@@ -48,6 +48,10 @@ public Deque()              // constructor
 {
     first = null;               // no links on list yet
 }
+/*
+ * isEmpty()Tests to see whether the deque is emptyReturns a
+ * boolean
+ */
 public boolean isEmpty()       // true if list is empty
 {
   return (first==null);
@@ -99,10 +103,44 @@ public int size()
     int count        = 1;
     while (null != currentLink.next) {
         count++;
+        currentLink = currentLink.next;
     }
     return count;
 }
+/*
+ * addRear(int)Add a new integer to the rear of the
+ * deque;Returns nothing
+ */
+public void addRear(int input)
+{
+    Link newLink = new Link(input);
+    if (true == this.isEmpty()) {
+        this.first = newLink;
+        return;
+    }
+    Link currentLink = this.first;
+    while (null != currentLink.next) {
+        currentLink = currentLink.next;
+    }
+    currentLink.next = newLink;
+}
+/*
+ * removeRear()Remove and return the integer at the end from the
+ * deque.
+ */
+public void removeRear()
+{
+}
 public static void main(String[] args)
 {
+    Deque thisList = new Deque();
+    System.out.println("isEmpty(): " + thisList.isEmpty());
+    System.out.println("size(): " + thisList.size());
+    thisList.addFront(1);
+    System.out.println("isEmpty(): " + thisList.isEmpty());
+    System.out.println("size(): " + thisList.size());
+    thisList.display();
+    thisList.addRear(9);
+    thisList.display();
 }
 }
