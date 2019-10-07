@@ -72,16 +72,20 @@ public class Deque
         first     = first.next;         // delete it: first-->old next
         return temp;                // return deleted link
     }
-    public void displayList()
+    /*
+     * display()Show all the integers currently in the deque from front to
+     * rear
+     */
+    public void display()
     {
-      System.out.print("List (first-->last): ");
-      Link current = first;       // start at beginning of list
-      while(current != null)      // until end of list,
-      {
-        current.displayLink();   // print data
-        current = current.next;  // move to next link
-      }
-      System.out.println("");
+        System.out.print("List (first-->last): ");
+        Link current = first;       // start at beginning of list
+        while(current != null)      // until end of list,
+        {
+            current.displayLink();   // print data
+            current = current.next;  // move to next link
+        }
+        System.out.println("");
     }
 public static void main(String[] args)
 {
