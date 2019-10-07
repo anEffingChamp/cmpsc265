@@ -130,6 +130,18 @@ public void addRear(int input)
  */
 public void removeRear()
 {
+    if (true == this.isEmpty()) {
+        return;
+    }
+    Link currentLink = this.first;
+    if (null == currentLink.next) {
+        this.first = null;
+        return;
+    }
+    while (null != currentLink.next.next) {
+        currentLink = currentLink.next;
+    }
+    currentLink.next = null;
 }
 public static void main(String[] args)
 {
@@ -141,6 +153,10 @@ public static void main(String[] args)
     System.out.println("size(): " + thisList.size());
     thisList.display();
     thisList.addRear(9);
+    thisList.display();
+    thisList.addFront(2);
+    thisList.addRear(10);
+    thisList.removeRear();
     thisList.display();
 }
 }
