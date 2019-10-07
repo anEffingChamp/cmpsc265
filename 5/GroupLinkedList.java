@@ -76,24 +76,29 @@ public class GroupLinkedList
         Link oddLink       = this.first;
         Link evenLink      = this.first.next;
         Link evenLinkFirst = evenLink;
-        Link currentLink   = this.first;
-        int currentCount   = 1;
-        while (null != currentLink.next) {
-            //Link temporaryLink = currentLink;
+        /*
+         * We loop through the list, creating a chain of odd and even nodes. We
+         * basically create two chains of odd and even respectively, then join
+         * the even nodes to the end of the odd chain when we finish.
+         */
+        while (null != oddLink.next.next) {
+            oddLink.next   = oddLink.next.next;
+            oddLink        = oddLink.next;
             if (null == oddLink.next) {
-                continue;
+                break;
             }
-            oddLink.next = oddLink.next.next;
-            oddLink      = oddLink.next;
-            currentLink  = currentLink.next;
-            currentCount++;
+            evenLink.next  = evenLink.next.next;
+            evenLink       = evenLink.next;
         }
-        switch (currentCount % 2) {
-        case 1:
-            System.out.println(currentCount);
-            break;
-        default:
+        /*
+         * We assume that the last list item was odd if the last list item is
+         * not even. If that case, we nullify the next field in evenLink,
+         * because we plan to overwrite the next field in oddLink thereafter.
+         */
+        if (null != evenLink.next) {
+            evenLink.next = null;
         }
+        oddLink.next = evenLinkFirst;
     }
     }  // end class LinkList
 ////////////////////////////////////////////////////////////////
