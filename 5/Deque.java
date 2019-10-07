@@ -87,6 +87,21 @@ public void display()
     }
     System.out.println("");
 }
+/*
+ * size()Returns the number of integers in the dequeReturns an integer.
+ */
+public int size()
+{
+    if (true == this.isEmpty()) {
+        return 0;
+    }
+    Link currentLink = this.first;
+    int count        = 1;
+    while (null != currentLink.next) {
+        count++;
+    }
+    return count;
+}
 public static void main(String[] args)
 {
 }
