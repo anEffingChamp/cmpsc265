@@ -39,12 +39,14 @@ public class Deque
     }
     }  // end class Link
 ////////////////////////////////////////////////////////////////
-    private static class LinkList
-    {
     private Link first;            // ref to first link on list
-    public LinkList()              // constructor
+    /*
+     * Deque()Constructor. A new deque will be
+     * instantiated that is empty.
+     */
+    public Deque()              // constructor
     {
-      first = null;               // no links on list yet
+        first = null;               // no links on list yet
     }
     public boolean isEmpty()       // true if list is empty
     {
@@ -77,49 +79,6 @@ public class Deque
       }
       System.out.println("");
     }
-    /**
-     * group() groups the odd and even nodes of a linked list such that all odd
-     * nodes are sorted first, and even numbered nodes come last. Their ranking
-     * as odd or even is determined by their initial position in the unsorted
-     * list.
-     */
-    public void group()
-    {
-        /*
-         * We can exit early if the list is empty.
-         */
-        if (null == this.first) {
-            System.out.println("The list is empty.");
-            return;
-        }
-        Link oddLink       = this.first;
-        Link evenLink      = this.first.next;
-        Link evenLinkFirst = evenLink;
-        /*
-         * We loop through the list, creating a chain of odd and even nodes. We
-         * basically create two chains of odd and even respectively, then join
-         * the even nodes to the end of the odd chain when we finish.
-         */
-        while (null != oddLink.next.next) {
-            oddLink.next   = oddLink.next.next;
-            oddLink        = oddLink.next;
-            if (null == oddLink.next) {
-                break;
-            }
-            evenLink.next  = evenLink.next.next;
-            evenLink       = evenLink.next;
-        }
-        /*
-         * We assume that the last list item was odd if the last list item is
-         * not even. If that case, we nullify the next field in evenLink,
-         * because we plan to overwrite the next field in oddLink thereafter.
-         */
-        if (null != evenLink.next) {
-            evenLink.next = null;
-        }
-        oddLink.next = evenLinkFirst;
-    }
-    }  // end class LinkList
 public static void main(String[] args)
 {
 }
