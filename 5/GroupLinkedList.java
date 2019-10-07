@@ -79,13 +79,13 @@ public class GroupLinkedList
         Link currentLink   = this.first;
         int currentCount   = 1;
         while (null != currentLink.next) {
-            Link temporaryLink = currentLink;
-            if (1 == currentCount
-            ||  1 == currentCount % 2
-            ) {
-                System.out.println(currentCount);
+            //Link temporaryLink = currentLink;
+            if (null == oddLink.next) {
+                continue;
             }
-            currentLink = currentLink.next;
+            oddLink.next = oddLink.next.next;
+            oddLink      = oddLink.next;
+            currentLink  = currentLink.next;
             currentCount++;
         }
         switch (currentCount % 2) {
