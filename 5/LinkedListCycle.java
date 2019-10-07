@@ -60,9 +60,44 @@ public class LinkedListCycle {
       }
       System.out.println("");
     }
-    public boolean containCycle(){
-      // YOUR CODES
-      return true;  // For compilation.  You need to change it
+    public boolean containCycle()
+    {
+        boolean output   = true;
+        Link currentLink = this.first;
+        Link slowLink    = this.first;
+        int fastCount    = 0;
+        int slowCount    = 0;
+        /*
+         * We start by looping through the whole list. We have two counters. One
+         * increments on every node, and the other increments on every other
+         * node.
+         */
+        while (null != currentLink.next) {
+            fastCount++;
+            if (0 == fastCount % 2) {
+                slowCount++;
+                slowLink = slowLink.next;
+            }
+            currentLink = currentLink.next;
+            /*
+             * We know that we have a loop if the currentLink ever equals the
+             * slowLink. There should never be any opportunity for overlap in a
+             * straight list.
+             */
+            if (currentLink == slowLink) {
+                return output;
+            }
+        }
+        /*
+         * We confirm that there is no loop by verifying that the slower counter
+         * is roughly half the value of the faster counter. Otherwise we assume
+         * that the list contains a loop, but it was not caught in our previous
+         * condition.
+         */
+        if (1 >= fastCount % slowCount) {
+            output = false;
+        }
+        return output;
     }
     }  // end class LinkList
 ////////////////////////////////////////////////////////////////
