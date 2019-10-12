@@ -86,55 +86,30 @@ public class ReverseLinkedList {
         currentLink.next.next = this.first;
         this.first            = currentLink.next;
         currentLink.next      = null;
-        /*
-        int linkIndex  = 0;
-        int linkTotal  = 2;
-        while (null != firstLink.next) {
-            linkTotal = this.reverseLinks(linkIndex, linkTotal);
-            linkIndex++;
-        }
-        */
+        this.reverseLinks(this.first);
     }
     /**
      *
      */
-    private int reverseLinks(int input, int linkTotal)
+    private void reverseLinks(Link input)
     {
-        Link currentLink = this.first;
-        int linkIndex    = 0;
-        int output       = linkTotal;
-        Link targetLink  = null;
-            System.out.println(currentLink.iData);
-        while (null != currentLink.next.next) {
-            /*
-             * We need to discover the total number of links in the linked list.
-             * This will help us to keep our position as we resort the list. We
-             * initialize the value at 2, so we should only trigger this
-             * condition on the first run.
-             */
-            if (2 == linkTotal) {
-                output++;
-            }
-            if (linkIndex == input) {
-                targetLink = currentLink;
-            }
-            currentLink = currentLink.next;
-            linkIndex++;
-        }
+        Link currentLink = input;
         /*
-         * Now we can move the last link on the list to the position after the
-         * target link. The target link is already sorted, so we use it as our
-         * starting position.
+         * We may have already reached the second to last link. In that case, we
+         * end the recursion, because we have fully sorted the list.
          */
-        if (0 == input) {
-            System.out.println(currentLink.iData);
-            currentLink.next = this.first;
-            this.first       = currentLink;
-            return output;
+        if (null == input.next.next) {
+            return;
         }
-        targetLink.next  = currentLink.next.next;
-        currentLink.next = null;
-        return output;
+        while (null != currentLink.next.next) {
+            currentLink = currentLink.next;
+        }
+        currentLink.next.next = input.next;
+        input.next            = currentLink.next;
+        currentLink.next      = null;
+        if (null != input.next.next) {
+            this.reverseLinks(input.next);
+        }
     }
     }  // end class LinkList
 ////////////////////////////////////////////////////////////////
