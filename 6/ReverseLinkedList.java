@@ -89,7 +89,14 @@ public class ReverseLinkedList {
         this.reverseLinks(this.first);
     }
     /**
+     * reverseLinks() reverses the order of links in a linked list. It accepts a
+     * starting link as an input. Then it will move to the penultimate link for
+     * currentLink. From there it will append the final link, currentLink.next,
+     * to input.next, and set currentLink.next to null such that currentLink
+     * becomes the final link.
      *
+     * It will end when the input link is already the penultimate link. In that
+     * case, we can assume that the list is sorted.
      */
     private void reverseLinks(Link input)
     {
