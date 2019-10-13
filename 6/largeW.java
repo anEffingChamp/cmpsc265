@@ -1,4 +1,6 @@
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 /**
  * Description:
  * Instead of dividing into half at each step, you are now supposed to divide
@@ -12,5 +14,19 @@ public class largeW
 {
 public static void main(String[] args)
 {
+    try {
+        /*
+         * We read the file according to the instructions at Java67.
+         * https://www.java67.com/2012/11/how-to-read-file-in-java-using-scanner-example.html
+         */
+        Scanner fileInput = new Scanner(new File("largeW.txt"));
+        ArrayList<Integer> fileIntegers = new ArrayList<Integer>();
+        while (true == fileInput.hasNext()) {
+            fileIntegers.add(Integer.valueOf(fileInput.next()));
+        }
+    } catch(FileNotFoundException exception) {
+        System.out.println("The file was not found.");
+        return;
+    }
 }
 }
