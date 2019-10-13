@@ -8,7 +8,8 @@ public class StringConstruction
 {
 /**
  * getStrings() accepts an array of characters, and returns all of the possible
- * combinations of those characters.
+ * combinations of those characters. It does so by calling
+ * StringConstruction.scrambleStrings().
  */
 public static ArrayList<String> getStrings(
     char[] inputCharacters,
@@ -19,19 +20,30 @@ public static ArrayList<String> getStrings(
         StringConstruction.scrambleStrings("", new String(inputCharacters));
     return output;
 }
+/**
+ * scrambleStrings() loops through all permutations of the original string, and
+ * assembles them into an array list. Then it returns them to getStrings() and
+ * main() for printing.
+ */
 private static ArrayList<String> scrambleStrings(String prefix, String input)
 {
     ArrayList<String> output = new ArrayList<String>();
     if (0 == input.length()) {
-        System.out.println(prefix);
+        /*
+         * I learned how to initialize an anonymous ArrayList here.
+         * https://howtodoinjava.com/java/collections/arraylist/merge-arraylists
+         */
+        return new ArrayList<String>(Arrays.asList(prefix));
     }
     for (int loop = 0;
     loop < input.length();
     loop++
     ) {
         String argument = input.substring(0, loop) + input.substring(loop + 1);
-        StringConstruction.scrambleStrings(
-            prefix + input.charAt(loop), argument
+        output.addAll(
+            StringConstruction.scrambleStrings(
+                prefix + input.charAt(loop), argument
+            )
         );
     }
     return output;
@@ -61,7 +73,8 @@ public static void main(String[] args)
     ) {
         characters[loop] = userString.charAt(loop);
     }
-    ArrayList<String> result =
-       StringConstruction.getStrings(characters, characterCount);
+    System.out.println(
+       StringConstruction.getStrings(characters, characterCount)
+    );
 }
 }
