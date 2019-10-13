@@ -21,6 +21,9 @@ static private ArrayList<Integer> list;
 public static void largeW(ArrayList<Integer> input)
 {
     largeW.list = largeW.mergeSort(input, 0, input.size());
+    for (Integer element: largeW.list) {
+        System.out.println(element);
+    }
     return;
 }
 public static void main(String[] args)
@@ -35,8 +38,7 @@ public static void main(String[] args)
         while (true == fileInput.hasNext()) {
             fileIntegers.add(Integer.valueOf(fileInput.next()));
         }
-        for (Integer element: fileIntegers) {
-        }
+        largeW.largeW(fileIntegers);
     } catch(FileNotFoundException exception) {
         System.out.println("The file was not found.");
         return;
@@ -68,6 +70,10 @@ public static ArrayList<Integer> mergeSort(
         largeW.mergeSort(input, (midPoint * 2) + 1, inputEnd)
     );
 }
+/**
+ * mergeResults() accepts three ArrayList as arguments, and merges them into a
+ * single sorted array. mergeResults() is the complement to mergeSort().
+ */
 private static ArrayList<Integer> mergeResults(
     ArrayList<Integer> inputFirst,
     ArrayList<Integer> inputSecond,
@@ -75,6 +81,41 @@ private static ArrayList<Integer> mergeResults(
 )
 {
     ArrayList<Integer> output = new ArrayList<Integer>();
+    while (false == inputFirst.isEmpty()
+    ||  false    == inputSecond.isEmpty()
+    || false     == inputThird.isEmpty()
+    ) {
+        int targetValue = Integer.MIN_VALUE,
+        targetList = 1;
+        if (false == inputFirst.isEmpty()) {
+            targetValue = inputFirst.get(0);
+            targetList  = 1;
+        }
+        if (false             == inputSecond.isEmpty()
+        &&  inputFirst.get(0) >= inputSecond.get(0)
+        ) {
+            targetValue = inputSecond.get(0);
+            targetList  = 2;
+        }
+        if (false       == inputThird.isEmpty()
+        &&  targetValue >= inputThird.get(0)
+        ) {
+            targetValue = inputThird.get(0);
+            targetList  = 3;
+        }
+        output.add(targetValue);
+        switch (targetList) {
+        case 3:
+            inputThird.remove(0);
+            break;
+        case 2:
+            inputSecond.remove(0);
+            break;
+        case 1:
+        default:
+            inputFirst.remove(0);
+        }
+    }
     return output;
 }
 }
