@@ -59,12 +59,16 @@ public static ArrayList<Integer> mergeSort(
      * specified with the start and end arguments.
      */
     ArrayList<Integer> output = new ArrayList<Integer>();
-    for (int loop = inputStart;
-    loop < inputEnd;
-    loop++
-    ) {
-        output.add(input.get(loop));
+    if (0 > inputStart) {
+        inputStart = 0;
     }
+    if (input.size() < inputEnd) {
+        inputEnd = input.size();
+    }
+    if (inputStart > inputEnd) {
+        inputEnd = inputStart;
+    }
+    output.addAll(input.subList(inputStart, inputEnd));
     /*
      * We can just return the output if it is a single element. A list with a
      * single item is sorted.
