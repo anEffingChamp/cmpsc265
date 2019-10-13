@@ -20,7 +20,7 @@ static private ArrayList<Integer> list;
  */
 public static void largeW(ArrayList<Integer> input)
 {
-    largeW.list = largeW.mergeSort(input, 0, input.size());
+    largeW.list = largeW.mergeSort(input);
     for (Integer element: largeW.list) {
         System.out.println(element);
     }
@@ -48,44 +48,49 @@ public static void main(String[] args)
  * mergeSort() sorts largeW.list with the three way merge technique as described
  * on https://en.wikipedia.org/wiki/Merge_sort#Algorithm.
  */
-public static ArrayList<Integer> mergeSort(
-    ArrayList<Integer> input,
-    int inputStart,
-    int inputEnd
-)
+public static ArrayList<Integer> mergeSort(ArrayList<Integer> input)
 {
     /*
      * We start by compiling the subdivion of the input list that we have
      * specified with the start and end arguments.
      */
-    ArrayList<Integer> output = new ArrayList<Integer>();
-    if (0 > inputStart) {
-        inputStart = 0;
-    }
-    if (input.size() < inputEnd) {
-        inputEnd = input.size();
-    }
-    if (inputStart > inputEnd) {
-        inputEnd = inputStart;
-    }
-    output.addAll(input.subList(inputStart, inputEnd));
+    switch (input.size()) {
     /*
-     * We can just return the output if it is a single element. A list with a
-     * single item is sorted.
+     * We can just return the list if has only one item. A single item is
+     * already sorted.
      */
-    if (1 >= output.size()) {
-        return output;
+    case 0:
+    case 1:
+        return input;
+    /*
+     * If there are two, we can check them. They may already be sorted. If not,
+     * we append the larger item to the end of the list, and remove it from the
+     * front.
+     */
+    case 2:
+        if (input.get(1) < input.get(0)) {
+            input.add(input.get(0));
+            input.remove(0);
+        }
+        return input;
+    default:
     }
     /*
      * This is where we distinguish a three way from two way merge. We calculate
      * the midPoint as one third of the range, and can easily multiply it by 2
      * for the second third.
      */
-    int midPoint = (inputStart + inputEnd) / 3;
+    int midPoint = input.size() / 3;
     return largeW.mergeResults(
-        largeW.mergeSort(input, inputStart, midPoint),
-        largeW.mergeSort(input, midPoint + 1, midPoint * 2),
-        largeW.mergeSort(input, (midPoint * 2) + 1, inputEnd)
+        largeW.mergeSort(new ArrayList<Integer>(input.subList(0, midPoint - 1))),
+        largeW.mergeSort(
+            new ArrayList<Integer>(input.subList(midPoint, midPoint * 2))
+        ),
+        largeW.mergeSort(
+            new ArrayList<Integer>(
+                input.subList((midPoint * 2) + 1, input.size())
+            )
+        )
     );
 }
 /**
@@ -104,20 +109,22 @@ private static ArrayList<Integer> mergeResults(
     || false     == inputThird.isEmpty()
     ) {
         int targetValue = Integer.MIN_VALUE,
-        targetList = 1;
+        targetList      = 0;
         if (false == inputFirst.isEmpty()) {
             targetValue = inputFirst.get(0);
             targetList  = 1;
         }
         if (false       == inputSecond.isEmpty()
-        &&  targetValue >= inputSecond.get(0)
-        ) {
+        &&  (targetValue   != Integer.MIN_VALUE
+            || targetValue >= inputSecond.get(0)
+        )) {
             targetValue = inputSecond.get(0);
             targetList  = 2;
         }
         if (false       == inputThird.isEmpty()
-        &&  targetValue >= inputThird.get(0)
-        ) {
+        &&  (targetValue     != Integer.MIN_VALUE
+            ||  targetValue >= inputThird.get(0)
+        )) {
             targetValue = inputThird.get(0);
             targetList  = 3;
         }
