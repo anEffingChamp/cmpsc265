@@ -6,10 +6,35 @@ import java.util.*;
  */
 public class StringConstruction
 {
-public static ArrayList<String> getStrings(char[] chars, int k)
+/**
+ * getStrings() accepts an array of characters, and returns all of the possible
+ * combinations of those characters.
+ */
+public static ArrayList<String> getStrings(
+    char[] inputCharacters,
+    int inputCount
+)
 {
-    // YOUR CODES
-    return null;  // For compilation. You need to change this.
+    ArrayList<String> output =
+        StringConstruction.scrambleStrings("", new String(inputCharacters));
+    return output;
+}
+private static ArrayList<String> scrambleStrings(String prefix, String input)
+{
+    ArrayList<String> output = new ArrayList<String>();
+    if (0 == input.length()) {
+        System.out.println(prefix);
+    }
+    for (int loop = 0;
+    loop < input.length();
+    loop++
+    ) {
+        String argument = input.substring(0, loop) + input.substring(loop + 1);
+        StringConstruction.scrambleStrings(
+            prefix + input.charAt(loop), argument
+        );
+    }
+    return output;
 }
 public static void main(String[] args)
 {
@@ -36,7 +61,7 @@ public static void main(String[] args)
     ) {
         characters[loop] = userString.charAt(loop);
     }
-    // YOUR CODES TO CALL THE getString() methods and
-    // display the results.
+    ArrayList<String> result =
+       StringConstruction.getStrings(characters, characterCount);
 }
 }
