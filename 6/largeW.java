@@ -54,9 +54,23 @@ public static ArrayList<Integer> mergeSort(
     int inputEnd
 )
 {
-    ArrayList<Integer> output = input;
-    if (1 >= inputStart - inputEnd) {
-        return input;
+    /*
+     * We start by compiling the subdivion of the input list that we have
+     * specified with the start and end arguments.
+     */
+    ArrayList<Integer> output = new ArrayList<Integer>();
+    for (int loop = inputStart;
+    loop < inputEnd;
+    loop++
+    ) {
+        output.add(input.get(loop));
+    }
+    /*
+     * We can just return the output if it is a single element. A list with a
+     * single item is sorted.
+     */
+    if (1 >= output.size()) {
+        return output;
     }
     /*
      * This is where we distinguish a three way from two way merge. We calculate
@@ -91,8 +105,8 @@ private static ArrayList<Integer> mergeResults(
             targetValue = inputFirst.get(0);
             targetList  = 1;
         }
-        if (false             == inputSecond.isEmpty()
-        &&  inputFirst.get(0) >= inputSecond.get(0)
+        if (false       == inputSecond.isEmpty()
+        &&  targetValue >= inputSecond.get(0)
         ) {
             targetValue = inputSecond.get(0);
             targetList  = 2;
@@ -107,12 +121,15 @@ private static ArrayList<Integer> mergeResults(
         switch (targetList) {
         case 3:
             inputThird.remove(0);
-            break;
+            continue;
         case 2:
             inputSecond.remove(0);
-            break;
+            continue;
         case 1:
         default:
+            if (true == inputFirst.isEmpty()) {
+                return output;
+            }
             inputFirst.remove(0);
         }
     }
