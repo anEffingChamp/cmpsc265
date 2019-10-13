@@ -115,14 +115,14 @@ private static ArrayList<Integer> mergeResults(
             targetList  = 1;
         }
         if (false       == inputSecond.isEmpty()
-        &&  (targetValue   != Integer.MIN_VALUE
+        &&  (targetValue   == Integer.MIN_VALUE
             || targetValue >= inputSecond.get(0)
         )) {
             targetValue = inputSecond.get(0);
             targetList  = 2;
         }
         if (false       == inputThird.isEmpty()
-        &&  (targetValue     != Integer.MIN_VALUE
+        &&  (targetValue     == Integer.MIN_VALUE
             ||  targetValue >= inputThird.get(0)
         )) {
             targetValue = inputThird.get(0);
