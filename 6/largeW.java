@@ -12,6 +12,17 @@ import java.util.*;
  */
 public class largeW
 {
+static private ArrayList<Integer> list;
+/**
+ * largeW() as an object constructor simply builds the object. It assigns the
+ * array list to an object property for other methods to work on as we sort the
+ * list.
+ */
+public static void largeW(ArrayList<Integer> input)
+{
+    largeW.list = input;
+    return;
+}
 public static void main(String[] args)
 {
     try {
@@ -23,6 +34,8 @@ public static void main(String[] args)
         ArrayList<Integer> fileIntegers = new ArrayList<Integer>();
         while (true == fileInput.hasNext()) {
             fileIntegers.add(Integer.valueOf(fileInput.next()));
+        }
+        for (Integer element: fileIntegers) {
         }
     } catch(FileNotFoundException exception) {
         System.out.println("The file was not found.");
