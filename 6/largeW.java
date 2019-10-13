@@ -15,12 +15,12 @@ public class largeW
 static private ArrayList<Integer> list;
 /**
  * largeW() as an object constructor simply builds the object. It assigns the
- * array list to an object property for other methods to work on as we sort the
- * list.
+ * array list to an object property, then immediately calls largeW.mergeSort()
+ * to sort the list.
  */
 public static void largeW(ArrayList<Integer> input)
 {
-    largeW.list = input;
+    largeW.list = largeW.mergeSort(input, 0, input.size());
     return;
 }
 public static void main(String[] args)
@@ -41,5 +41,40 @@ public static void main(String[] args)
         System.out.println("The file was not found.");
         return;
     }
+}
+/**
+ * mergeSort() sorts largeW.list with the three way merge technique as described
+ * on https://en.wikipedia.org/wiki/Merge_sort#Algorithm.
+ */
+public static ArrayList<Integer> mergeSort(
+    ArrayList<Integer> input,
+    int inputStart,
+    int inputEnd
+)
+{
+    ArrayList<Integer> output = input;
+    if (1 >= inputStart - inputEnd) {
+        return input;
+    }
+    /*
+     * This is where we distinguish a three way from two way merge. We calculate
+     * the midPoint as one third of the range, and can easily multiply it by 2
+     * for the second third.
+     */
+    int midPoint = (inputStart + inputEnd) / 3;
+    return largeW.mergeResults(
+        largeW.mergeSort(input, inputStart, midPoint),
+        largeW.mergeSort(input, midPoint + 1, midPoint * 2),
+        largeW.mergeSort(input, (midPoint * 2) + 1, inputEnd)
+    );
+}
+private static ArrayList<Integer> mergeResults(
+    ArrayList<Integer> inputFirst,
+    ArrayList<Integer> inputSecond,
+    ArrayList<Integer> inputThird
+)
+{
+    ArrayList<Integer> output = new ArrayList<Integer>();
+    return output;
 }
 }
