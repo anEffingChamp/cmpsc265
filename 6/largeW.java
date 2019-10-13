@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 /**
  * Description:
@@ -21,8 +20,17 @@ static private ArrayList<Integer> list;
 public static void largeW(ArrayList<Integer> input)
 {
     largeW.list = largeW.mergeSort(input);
-    for (Integer element: largeW.list) {
-        System.out.println(element);
+    try {
+        Writer writer = new OutputStreamWriter(
+            new FileOutputStream("largeWResults.txt"), "UTF8"
+        );
+        for (Integer element: largeW.list) {
+            System.out.println(element);
+            writer.append(element + "\n");
+        }
+        writer.close();
+    } catch (IOException exception) {
+        System.out.println("There is no FileWriter");
     }
     return;
 }
