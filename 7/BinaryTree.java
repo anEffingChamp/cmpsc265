@@ -7,9 +7,13 @@ import java.util.*;
 
 public class BinaryTree
 {
-////////////////////////////////////////////////////////////////
-  private Node root;
-
+private Node root;
+/**
+ * symmetryQueue is the stack we use to verify symmetry in the tree within
+ * isSymmetric(). It is an object property to share its data between methods in
+ * the BinaryTree{}.
+ */
+private Queue<Node> symmetryQueue;
   private static class Node {
     public int iData;              // data item (key)
     public Node leftChild;         // this node's left child
@@ -22,8 +26,11 @@ public class BinaryTree
   }  // end class Node
 
 //-------------------------------------------------------------
-  public BinaryTree()         // constructor of the Binary Tree
-  { root = null; }            // no nodes in tree yet
+public BinaryTree()         // constructor of the Binary Tree
+{
+    root = null;
+    this.symmetryQueue = new LinkedList<Node>();
+}            // no nodes in tree yet
 //-------------------------------------------------------------
 
   public void insert(int id) {
@@ -126,16 +133,90 @@ private int countChildren(Node input)
     }
     return nodeCount;
 }
-
-  /*@param  another binary tree
-   * @return return true or false
-   * indicating whether this binary tree is symmetric of itself.
-   */
-  public boolean isSymmetric(){
-    // YOUR CODES
-    return false;  // FOR COMPILATION, YOU NEED TO CHANGE IT
-  }
-
+/**
+ * isSymmetric() verifies whether a binary tree is is a mirror of itself (i.e.,,
+ * symmetric around its center).
+ */
+public boolean isSymmetric()
+{
+    boolean output = false;
+    Node currentNode = this.root;
+    /*
+     * We can exit right away if the root node only has one child. There is no
+     * way to build symmetry after that point.
+     */
+    if ((null == currentNode.leftChild) != (null == currentNode.rightChild)) {
+        return false;
+    }
+    /*
+     * On the other hand, the tree is symmetrical if it has only a root node. A
+     * single node will be symmetrical.
+     */
+    if (null == currentNode.leftChild
+    &&  null == currentNode.rightChild
+    ) {
+        return true;
+    }
+    /*
+     * We need breadth first traversal of the binary tree to verify its
+     * symmetry. Now is time to break out the stack.
+     */
+    this.symmetryQueue.add(this.root);
+    int rowCount = 1;
+    while (false == this.symmetryQueue.isEmpty()) {
+        rowCount = this.checkSymmetry(rowCount);
+        if (-1 == rowCount) {
+            return false;
+        }
+    }
+    return true;
+}
+/**
+ * checkSymmetry() accepts a node as an argument, and loads its child nodes into
+ * symmetryQueue. It returns an integer count of how many nodes are on a level
+ * so that we know what to expect in the next iteration.
+ */
+private int checkSymmetry(int inputCount)
+{
+    /*
+     * We can not have symmetry with an odd number of nodes on the level. Lets
+     * get out of here.
+     */
+    if (1 == inputCount % 2) {
+        return -1;
+    }
+    Node currentNode     = null;
+    int output           = 0;
+    int nodeArrayCounter = 0;
+    Node[] nodeArray     = new Node[inputCount * 2];
+    for (int loop = 0;
+    loop < inputCount;
+    loop += 2
+    ) {
+        currentNode = this.symmetryQueue.remove();
+        if (null != currentNode.leftChild) {
+            nodeArray[loop] = currentNode.leftChild;
+            this.symmetryQueue.add(currentNode.leftChild);
+            output++;
+        }
+        if (null != currentNode.rightChild) {
+            nodeArray[loop + 1] = currentNode.rightChild;
+            this.symmetryQueue.add(currentNode.rightChild);
+            output++;
+        }
+    }
+    for (int loop = 0;
+    loop <= inputCount / 2;
+    loop++
+    ) {
+        if ((null == nodeArray[loop])
+            != (null == nodeArray[inputCount - loop])
+        ) {
+            return -1;
+        }
+    }
+    return output;
+}
   /*
    * @param none
    * @return return all the root-to-leaf paths in this Binary Tree
@@ -170,8 +251,12 @@ System.out.println("The tree has " + theTree.getNodes() + " nodes.");
 
 /* Problem 2:
  * Call isSymmetric() to judge this binary tree is symmetric of itself around the center.
- * YOUR CODES
  */
+String symmetryBoolean = "";
+if (false == theTree.isSymmetric()) {
+    symmetryBoolean = "not ";
+}
+System.out.println("The tree is " + symmetryBoolean + "symmetric.");
 
 
 /*
