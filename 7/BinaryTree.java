@@ -225,19 +225,30 @@ private int checkSymmetry(int inputCount)
  */
 public ArrayList<ArrayList<Integer>> getPaths()
 {
-    Node currentNode                     = this.root;
-    ArrayList<ArrayList<Integer>> output = new ArrayList<ArrayList<Integer>>();
-    ArrayList<Integer> argument          = new ArrayList<Integer>();
+    ArrayList<Integer> argument = new ArrayList<Integer>();
     argument.add(this.root.iData);
-    if (null != currentNode.leftChild) {
-        int count = this.findLeaf(this.root.leftChild, argument);
+    if (null != this.root.leftChild) {
+        /*
+         * ArrayList<> sits in memory, and is not truly a local variable. We
+         * need to clone the list at each step to avoid acting on the globally
+         * available list.
+         */
+        this.findLeaf(this.root.leftChild, argument.clone());
+    }
+    if (null != this.root.rightChild) {
+        this.findLeaf(this.root.rightChild, argument.clone());
     }
     return this.leafPaths;
 }
-private int findLeaf(Node inputNode, ArrayList<Integer> input) {
-    ArrayList<Integer> argument = input;
+/**
+ * findLeaf() navigates the binary tree to find leaf nodes. It creates a clone
+ * of its argument ArrayList<> on each step, and adds that ArrayList<> to
+ * this.leafPaths when it finds a leaf node.
+ */
+private void findLeaf(Node inputNode, Object input) {
+    @SuppressWarnings("unchecked")
+    ArrayList<Integer> argument = (ArrayList) input;
     argument.add(inputNode.iData);
-    int output = 1;
     /*
      * We have found a leaf node when we have no more children to follow. We can
      * add the mapped path to our list.
@@ -246,17 +257,14 @@ private int findLeaf(Node inputNode, ArrayList<Integer> input) {
     &&  null == inputNode.rightChild
     ) {
         this.leafPaths.add(argument);
-        return 1;
     }
-    while (output < this.countChildren(inputNode)) {
-        if (null != inputNode.rightChild) {
-            output += this.findLeaf(inputNode.rightChild, argument);
-        }
-        if (null != inputNode.leftChild) {
-            output += this.findLeaf(inputNode.leftChild, argument);
-        }
+    if (null != inputNode.rightChild) {
+        this.findLeaf(inputNode.rightChild, argument.clone());
     }
-    return output;
+    if (null != inputNode.leftChild) {
+        this.findLeaf(inputNode.leftChild, argument.clone());
+    }
+    return;
 }
 public static void main(String[] args) throws IOException
 {
@@ -277,7 +285,8 @@ theTree.insert(97);
 theTree.displayTree();
 
 /* Problem 1:
- * Please call the methods of getNode(), and return the total number of nodes in this binary tree
+ * Please call the methods of getNode(), and return the total number of nodes in
+ * this binary tree
  */
 System.out.println("The tree has " + theTree.getNodes() + " nodes.");
 
