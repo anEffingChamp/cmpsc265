@@ -5,15 +5,16 @@ import java.util.Stack;
 import java.util.Random;
 import java.util.*;
 
-public class BinaryTree {
+public class BinaryTree
+{
 ////////////////////////////////////////////////////////////////
   private Node root;
-  
+
   private static class Node {
     public int iData;              // data item (key)
     public Node leftChild;         // this node's left child
     public Node rightChild;        // this node's right child
-    
+
     public void displayNode()      // display ourself
     {
       System.out.print(iData + " ");
@@ -24,7 +25,7 @@ public class BinaryTree {
   public BinaryTree()         // constructor of the Binary Tree
   { root = null; }            // no nodes in tree yet
 //-------------------------------------------------------------
-  
+
   public void insert(int id) {
     Node newNode = new Node();    // make new node
     newNode.iData = id;           // insert data
@@ -74,7 +75,7 @@ public class BinaryTree {
       }
     }
     System.out.println();
-  }  
+  }
 
   public void displayTree2() {
     Queue<Node> q = new LinkedList<Node>();
@@ -89,24 +90,52 @@ public class BinaryTree {
         q.add(current.rightChild);
       }
     }
-  }  
-  /* @param none
-   * @return the total number of nodes in this Binary Tree
-   */
-  public int getNodes(){
-    // YOUR CODES
-    return -1;  // FOR COMPILATION, YOU NEED TO CHANGE IT 
   }
-  
+/**
+ * getNodes() recursively counts the total number of nodes in a binary tree. It
+ * does so by calling an internal method to follow the tree to each leaf node,
+ * and returns the current count of the tree.
+ */
+public int getNodes()
+{
+    Node currentNode = this.root;
+    if (null == currentNode) {
+        return 0;
+    }
+    int nodeCount    = 1;
+    if (null != currentNode.leftChild) {
+        nodeCount += this.countChildren(currentNode.leftChild);
+    }
+    if (null != currentNode.rightChild) {
+        nodeCount += this.countChildren(currentNode.rightChild);
+    }
+    return nodeCount;
+}
+/**
+ * countChildren() accepts a given Node as an argument, and counts how many
+ * children that node has.
+ */
+private int countChildren(Node input)
+{
+    int nodeCount    = 1;
+    if (null != input.leftChild) {
+        nodeCount += this.countChildren(input.leftChild);
+    }
+    if (null != input.rightChild) {
+        nodeCount += this.countChildren(input.rightChild);
+    }
+    return nodeCount;
+}
+
   /*@param  another binary tree
    * @return return true or false
    * indicating whether this binary tree is symmetric of itself.
    */
   public boolean isSymmetric(){
     // YOUR CODES
-    return false;  // FOR COMPILATION, YOU NEED TO CHANGE IT  
+    return false;  // FOR COMPILATION, YOU NEED TO CHANGE IT
   }
-  
+
   /*
    * @param none
    * @return return all the root-to-leaf paths in this Binary Tree
@@ -115,39 +144,40 @@ public class BinaryTree {
     // YOUR CODES
     return null; // FOR COMPILAION, YOU NEED TO CHANGE IT.
   }
-  
-  public static void main(String[] args) throws IOException {
-    // Sample Codes, Create a binary tree and display all the nodes in level-order
-    BinaryTree theTree = new BinaryTree();
-    theTree.insert(50);    
-    theTree.insert(25);    
-    theTree.insert(75);
-    theTree.insert(12);    
-    theTree.insert(37);    
-    theTree.insert(43); 
-    theTree.insert(30);    
-    theTree.insert(33);
-    theTree.insert(87);
-    theTree.insert(93);    
-    theTree.insert(97);
-    
-    theTree.displayTree();
-    
-    /* Problem 1:
-     * Please call the methods of getNode(), and return the total number of nodes in this binary tree
-     * YOUR CODES
-     */
-    
-    /* Problem 2:
-     * Call isSymmetric() to judge this binary tree is symmetric of itself around the center.
-     * YOUR CODES
-     */
-    
-    
-    /*
-     * Problem 3:
-     * Call the getPaths() method, and display all the root-to-leaf paths on the binary tree
-     * YOUR CODES
-     */
-  }
+
+public static void main(String[] args) throws IOException
+{
+// Sample Codes, Create a binary tree and display all the nodes in level-order
+BinaryTree theTree = new BinaryTree();
+theTree.insert(50);
+theTree.insert(25);
+theTree.insert(75);
+theTree.insert(12);
+theTree.insert(37);
+theTree.insert(43);
+theTree.insert(30);
+theTree.insert(33);
+theTree.insert(87);
+theTree.insert(93);
+theTree.insert(97);
+
+theTree.displayTree();
+
+/* Problem 1:
+ * Please call the methods of getNode(), and return the total number of nodes in this binary tree
+ */
+System.out.println("The tree has " + theTree.getNodes() + " nodes.");
+
+/* Problem 2:
+ * Call isSymmetric() to judge this binary tree is symmetric of itself around the center.
+ * YOUR CODES
+ */
+
+
+/*
+ * Problem 3:
+ * Call the getPaths() method, and display all the root-to-leaf paths on the binary tree
+ * YOUR CODES
+ */
+}
 }
