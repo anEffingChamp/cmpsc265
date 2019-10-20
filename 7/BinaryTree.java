@@ -14,6 +14,7 @@ private Node root;
  * the BinaryTree{}.
  */
 private Queue<Node> symmetryQueue;
+private ArrayList<ArrayList<Integer>> leafPaths;
   private static class Node {
     public int iData;              // data item (key)
     public Node leftChild;         // this node's left child
@@ -28,8 +29,9 @@ private Queue<Node> symmetryQueue;
 //-------------------------------------------------------------
 public BinaryTree()         // constructor of the Binary Tree
 {
-    root = null;
+    this.root          = null;
     this.symmetryQueue = new LinkedList<Node>();
+    this.leafPaths     = new ArrayList<ArrayList<Integer>>();
 }            // no nodes in tree yet
 //-------------------------------------------------------------
 
@@ -217,15 +219,45 @@ private int checkSymmetry(int inputCount)
     }
     return output;
 }
-  /*
-   * @param none
-   * @return return all the root-to-leaf paths in this Binary Tree
-   */
-  public ArrayList<ArrayList<Integer>> getPaths(){
-    // YOUR CODES
-    return null; // FOR COMPILAION, YOU NEED TO CHANGE IT.
-  }
-
+/**
+ * getPaths() displays a list of all available paths from root node to leaf
+ * node.
+ */
+public ArrayList<ArrayList<Integer>> getPaths()
+{
+    Node currentNode                     = this.root;
+    ArrayList<ArrayList<Integer>> output = new ArrayList<ArrayList<Integer>>();
+    ArrayList<Integer> argument          = new ArrayList<Integer>();
+    argument.add(this.root.iData);
+    if (null != currentNode.leftChild) {
+        int count = this.findLeaf(this.root.leftChild, argument);
+    }
+    return this.leafPaths;
+}
+private int findLeaf(Node inputNode, ArrayList<Integer> input) {
+    ArrayList<Integer> argument = input;
+    argument.add(inputNode.iData);
+    int output = 1;
+    /*
+     * We have found a leaf node when we have no more children to follow. We can
+     * add the mapped path to our list.
+     */
+    if (null == inputNode.leftChild
+    &&  null == inputNode.rightChild
+    ) {
+        this.leafPaths.add(argument);
+        return 1;
+    }
+    while (output < this.countChildren(inputNode)) {
+        if (null != inputNode.rightChild) {
+            output += this.findLeaf(inputNode.rightChild, argument);
+        }
+        if (null != inputNode.leftChild) {
+            output += this.findLeaf(inputNode.leftChild, argument);
+        }
+    }
+    return output;
+}
 public static void main(String[] args) throws IOException
 {
 // Sample Codes, Create a binary tree and display all the nodes in level-order
@@ -258,11 +290,22 @@ if (false == theTree.isSymmetric()) {
 }
 System.out.println("The tree is " + symmetryBoolean + "symmetric.");
 
-
 /*
  * Problem 3:
  * Call the getPaths() method, and display all the root-to-leaf paths on the binary tree
- * YOUR CODES
  */
+for (ArrayList<Integer> element: theTree.getPaths()) {
+    for (int loop = 0;
+    loop < element.size();
+    loop++
+    ) {
+        String outputSuffix = "->";
+        if (loop == element.size() - 1) {
+            outputSuffix = "";
+        }
+        System.out.print(element.get(loop) + outputSuffix);
+    }
+    System.out.println("");
+}
 }
 }
