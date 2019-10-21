@@ -68,6 +68,7 @@ private prefixNode root;
 private Queue<Character> queue;
 private ArrayList<ArrayList<Integer>> leafPaths;
 private ArrayList<Character> leafCharacters;
+private Scanner userInput;
     private static class prefixNode
     {
     public char character;
@@ -95,7 +96,8 @@ public PrefixTree()
     this.root           = new prefixNode('*');
     this.leafPaths      = new ArrayList<ArrayList<Integer>>();
     this.leafCharacters = new ArrayList<Character>();
-    Scanner userInput   = new Scanner(System.in);
+    this.userInput      = new Scanner(System.in);
+    this.queue          = new LinkedList<Character>();
     System.out.println("Please enter the preorder traversal of a binary tree.");
     /*
      * Lets start by building a queue for depth first traversal of the
@@ -105,15 +107,7 @@ public PrefixTree()
      * checking each character of the input. We assign it to a PrefixTree.queue
      * property for later access, and run off to the races.
      */
-    this.queue             = new LinkedList<Character>();
-    String inputString     = userInput.next();
-    char[] inputCharachers = inputString.toCharArray();
-    for (int loop = 0;
-    loop < inputCharachers.length;
-    loop++
-    ) {
-        this.queue.add(inputCharachers[loop]);
-    }
+    this.queueString(userInput.next());
     /*
      * The assignment suggests
      * that the user should write * for the root node. We require that
@@ -238,9 +232,48 @@ private void preorder(prefixNode inputNode, Object inputList)
         this.preorder(inputNode.rightChild, rightArgument.clone());
     }
 }
+/**
+ * Now, write a method uncompress()that reads the compressed message from
+ * standard input, and writes the uncompressed message to standard output. It
+ * should also display the number of bits read in, the number of characters in
+ * the original message, and the compression factor.For example, the original
+ * message above contains 12 characters thatwould normally requires 96 bits of
+ * storage (8 bits per character). The compressed message uses only 28 bits, or
+ * 29% of the space required without compression. The compression factor depends
+ * on the frequency of characters in the message, but ratiosaround 50% are
+ * common for English text. Note that for large messages the amount of space
+ * needed to store the description of the tree is negligible compared to storing
+ * the message itself, so we have ignored this quantity in the calculation.
+ * Also, for simplicity, the compressed message is a sequence of the characters
+ * '0' and '1'. In an actual application, these bits would be packed eight to
+ * the byte, thus using 1/8th the space
+ */
+public void uncompress()
+{
+    System.out.println("Please input a binary encoded string to decompress.");
+    this.queueString(userInput.next());
+    while (null != this.queue.peek()) {
+    }
+}
+/**
+ * queueString() accepts a string, and adds it to this.queue for parsing.
+ * Depending upon the calling method, the string may be characters to encode, or
+ * decode.
+ */
+private void queueString(String inputString)
+{
+    char[] inputCharachers = inputString.toCharArray();
+    for (int loop = 0;
+    loop < inputCharachers.length;
+    loop++
+    ) {
+        this.queue.add(inputCharachers[loop]);
+    }
+}
 public static void main(String[] args) throws IOException
 {
     PrefixTree treeRoot = new PrefixTree();
     treeRoot.preorder();
+    //treeRoot.uncompress();
 }
 }
