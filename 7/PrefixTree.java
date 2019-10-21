@@ -253,6 +253,23 @@ public void uncompress()
     System.out.println("Please input a binary encoded string to decompress.");
     this.queueString(userInput.next());
     while (null != this.queue.peek()) {
+        this.uncompress(this.root);
+    }
+}
+private void uncompress(prefixNode input)
+{
+    if ('*' != input.character) {
+        System.out.print(input.character);
+        return;
+    }
+    char queueCharacter = this.queue.poll();
+    switch (queueCharacter) {
+    case '1':
+        this.uncompress(input.rightChild);
+        break;
+    default:
+    case '0':
+        this.uncompress(input.leftChild);
     }
 }
 /**
@@ -274,6 +291,6 @@ public static void main(String[] args) throws IOException
 {
     PrefixTree treeRoot = new PrefixTree();
     treeRoot.preorder();
-    //treeRoot.uncompress();
+    treeRoot.uncompress();
 }
 }
