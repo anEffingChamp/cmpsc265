@@ -56,266 +56,67 @@ import java.util.*;
  */
 public class PrefixTree
 {
-private Node root;
-/**
- * symmetryQueue is the stack we use to verify symmetry in the tree within
- * isSymmetric(). It is an object property to share its data between methods in
- * the PrefixTree{}.
+/*
+ * Part 1: Building the treeDesign a class PrefixTree to represent prefix
+ * trees.
+ * A PrefixTree should store a character (either an input symbol or the special
+ * character '*') and references to two subtrees. The beginning of your class
+ * might look like:public class PrefixTree {private char character;private
+ * PrefixTree left;private PrefixTree right;}
  */
-private Queue<Node> symmetryQueue;
-private ArrayList<ArrayList<Integer>> leafPaths;
-  private static class Node {
-    public int iData;              // data item (key)
-    public Node leftChild;         // this node's left child
-    public Node rightChild;        // this node's right child
-
-    public void displayNode()      // display ourself
-    {
-      System.out.print(iData + " ");
-    }
-  }  // end class Node
-
-//-------------------------------------------------------------
-public PrefixTree()         // constructor of the Binary Tree
-{
-    this.root          = null;
-    this.symmetryQueue = new LinkedList<Node>();
-    this.leafPaths     = new ArrayList<ArrayList<Integer>>();
-}            // no nodes in tree yet
-//-------------------------------------------------------------
-
-  public void insert(int id) {
-    Node newNode = new Node();    // make new node
-    newNode.iData = id;           // insert data
-
-    if(root==null)                // no node in root
-      root = newNode;
-    else                          // root occupied
-    {
-      Random rnd = new Random();
-      Node current = root;
-      Node parent = root;
-      int rand = 0;
-      while (current!=null){
-        parent = current;
-        rand = rnd.nextInt(2);
-        if (rand==0) current = current.leftChild;
-        else current = current.rightChild;
-      }
-      if (rand==0) parent.leftChild = newNode;
-      else parent.rightChild = newNode;
-    }
-  }  // end insert()
-
-//-------------------------------------------------------------
-
-  /* Level-order traversal of the Tree
-   */
-  public void displayTree() {
-    Queue<Node> q = new LinkedList<Node>();
-    q.add(root);
-    while (!q.isEmpty()){
-      Node current = q.poll();
-      current.displayNode();
-      if (current.leftChild!=null) {
-        System.out.print(current.iData + " " + "Left: " + current.leftChild.iData + "\t");
-        q.add(current.leftChild);
-      }
-      else {
-        System.out.print(current.iData + " " + "Left:NULL" + "\t");
-      }
-      if (current.rightChild!=null) {
-        System.out.print(current.iData + " " + "Right: " + current.rightChild.iData + "\n");
-        q.add(current.rightChild);
-      }
-      else {
-        System.out.println(current.iData + " " + "Right:NULL");
-      }
-    }
-    System.out.println();
-  }
-
-  public void displayTree2() {
-    Queue<Node> q = new LinkedList<Node>();
-    q.add(root);
-    while (!q.isEmpty()){
-      Node current = q.poll();
-      current.displayNode();
-      if (current.leftChild!=null) {
-        q.add(current.leftChild);
-      }
-      if (current.rightChild!=null) {
-        q.add(current.rightChild);
-      }
-    }
-  }
+private char character;
+private PrefixTree leftChild;
+private PrefixTree rightChild;
+private Queue<Character> queue;
 /**
- * getNodes() recursively counts the total number of nodes in a binary tree. It
- * does so by calling an internal method to follow the tree to each leaf node,
- * and returns the current count of the tree.
+ * Design the constructor so that it reads in the preorder traversal of a tree
+ * from standard input, and reconstructs it.
  */
-public int getNodes()
-{
-    Node currentNode = this.root;
-    if (null == currentNode) {
-        return 0;
-    }
-    int nodeCount    = 1;
-    if (null != currentNode.leftChild) {
-        nodeCount += this.countChildren(currentNode.leftChild);
-    }
-    if (null != currentNode.rightChild) {
-        nodeCount += this.countChildren(currentNode.rightChild);
-    }
-    return nodeCount;
-}
-/**
- * countChildren() accepts a given Node as an argument, and counts how many
- * children that node has.
- */
-private int countChildren(Node input)
-{
-    int nodeCount    = 1;
-    if (null != input.leftChild) {
-        nodeCount += this.countChildren(input.leftChild);
-    }
-    if (null != input.rightChild) {
-        nodeCount += this.countChildren(input.rightChild);
-    }
-    return nodeCount;
-}
-/**
- * isSymmetric() verifies whether a binary tree is is a mirror of itself (i.e.,,
- * symmetric around its center).
- */
-public boolean isSymmetric()
-{
-    boolean output = false;
-    Node currentNode = this.root;
-    /*
-     * We can exit right away if the root node only has one child. There is no
-     * way to build symmetry after that point.
-     */
-    if ((null == currentNode.leftChild) != (null == currentNode.rightChild)) {
-        return false;
-    }
-    /*
-     * On the other hand, the tree is symmetrical if it has only a root node. A
-     * single node will be symmetrical.
-     */
-    if (null == currentNode.leftChild
-    &&  null == currentNode.rightChild
-    ) {
-        return true;
-    }
-    /*
-     * We need breadth first traversal of the binary tree to verify its
-     * symmetry. Now is time to break out the stack.
-     */
-    this.symmetryQueue.add(this.root);
-    int rowCount = 1;
-    while (false == this.symmetryQueue.isEmpty()) {
-        rowCount = this.checkSymmetry(rowCount);
-        if (-1 == rowCount) {
-            return false;
-        }
-    }
-    return true;
-}
-/**
- * checkSymmetry() accepts a node as an argument, and loads its child nodes into
- * symmetryQueue. It returns an integer count of how many nodes are on a level
- * so that we know what to expect in the next iteration.
- */
-private int checkSymmetry(int inputCount)
+public PrefixTree()
 {
     /*
-     * We can not have symmetry with an odd number of nodes on the level. Lets
-     * get out of here.
+     * We assume that this is an interior node until told otherwise. The root
+     * node is an interior node by necessity.
      */
-    if (1 == inputCount % 2) {
-        return -1;
-    }
-    Node currentNode     = null;
-    int output           = 0;
-    int nodeArrayCounter = 0;
-    Node[] nodeArray     = new Node[inputCount * 2];
+    this.character    = '*';
+    Scanner userInput = new Scanner(System.in);
+    System.out.println("Please enter the preorder traversal of a binary tree.");
+    /*
+     * Lets start by building a queue for depth first traversal of the
+     * PrefixTree{}. It feels so right, how could it be wrong?
+     *
+     * We do so by reading the first string that the user has written, and
+     * checking each character of the input. We assign it to a PrefixTree.queue
+     * property for later access, and run off to the races.
+     */
+    this.queue             = new LinkedList<Character>();
+    String inputString     = userInput.next();
+    char[] inputCharachers = inputString.toCharArray();
     for (int loop = 0;
-    loop < inputCount;
-    loop += 2
-    ) {
-        currentNode = this.symmetryQueue.remove();
-        if (null != currentNode.leftChild) {
-            nodeArray[loop] = currentNode.leftChild;
-            this.symmetryQueue.add(currentNode.leftChild);
-            output++;
-        }
-        if (null != currentNode.rightChild) {
-            nodeArray[loop + 1] = currentNode.rightChild;
-            this.symmetryQueue.add(currentNode.rightChild);
-            output++;
-        }
-    }
-    for (int loop = 0;
-    loop <= inputCount / 2;
+    loop < inputCharachers.length;
     loop++
     ) {
-        if ((null == nodeArray[loop])
-            != (null == nodeArray[inputCount - loop])
-        ) {
-            return -1;
-        }
+        System.out.println(inputCharachers[loop]);
+        this.queue.add(inputCharachers[loop]);
     }
-    return output;
-}
-/**
- * getPaths() displays a list of all available paths from root node to leaf
- * node.
- */
-public ArrayList<ArrayList<Integer>> getPaths()
-{
-    ArrayList<Integer> argument = new ArrayList<Integer>();
-    argument.add(this.root.iData);
-    if (null != this.root.leftChild) {
-        /*
-         * ArrayList<> sits in memory, and is not truly a local variable. We
-         * need to clone the list at each step to avoid acting on the globally
-         * available list.
-         */
-        this.findLeaf(this.root.leftChild, argument.clone());
-    }
-    if (null != this.root.rightChild) {
-        this.findLeaf(this.root.rightChild, argument.clone());
-    }
-    return this.leafPaths;
-}
-/**
- * findLeaf() navigates the binary tree to find leaf nodes. It creates a clone
- * of its argument ArrayList<> on each step, and adds that ArrayList<> to
- * this.leafPaths when it finds a leaf node.
- */
-private void findLeaf(Node inputNode, Object input) {
-    @SuppressWarnings("unchecked")
-    ArrayList<Integer> argument = (ArrayList) input;
-    argument.add(inputNode.iData);
     /*
-     * We have found a leaf node when we have no more children to follow. We can
-     * add the mapped path to our list.
+     * The assignment suggests
+     * that the user should write * for the root node. We require that
+     * internally, but disregard the first characher to better align with the
+     * assignment.
      */
-    if (null == inputNode.leftChild
-    &&  null == inputNode.rightChild
-    ) {
-        this.leafPaths.add(argument);
-    }
-    if (null != inputNode.rightChild) {
-        this.findLeaf(inputNode.rightChild, argument.clone());
-    }
-    if (null != inputNode.leftChild) {
-        this.findLeaf(inputNode.leftChild, argument.clone());
-    }
-    return;
+    this.queue.remove();
+}
+/**
+ * PrefixTree() also accepts a character as input so that we can assign
+ * attributes right away.
+ */
+private PrefixTree(char input)
+{
+    this.character = input;
 }
 public static void main(String[] args) throws IOException
 {
+    PrefixTree treeRoot = new PrefixTree();
 }
 }
