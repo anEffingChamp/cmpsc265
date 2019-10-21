@@ -67,6 +67,7 @@ public class PrefixTree
 private prefixNode root;
 private Queue<Character> queue;
 private ArrayList<ArrayList<Integer>> leafPaths;
+private ArrayList<Character> leafCharacters;
     private static class prefixNode
     {
     public char character;
@@ -91,9 +92,10 @@ public PrefixTree()
      * We assume that this is an interior node until told otherwise. The root
      * node is an interior node by necessity.
      */
-    this.root         = new prefixNode('*');
-    this.leafPaths    = new ArrayList<ArrayList<Integer>>();
-    Scanner userInput = new Scanner(System.in);
+    this.root           = new prefixNode('*');
+    this.leafPaths      = new ArrayList<ArrayList<Integer>>();
+    this.leafCharacters = new ArrayList<Character>();
+    Scanner userInput   = new Scanner(System.in);
     System.out.println("Please enter the preorder traversal of a binary tree.");
     /*
      * Lets start by building a queue for depth first traversal of the
@@ -184,7 +186,9 @@ private void addCharacter(prefixNode input)
 public void preorder()
 {
     this.preorder(this.root, new ArrayList<Integer>());
+    int count = 0;
     for (ArrayList<Integer> element: this.leafPaths) {
+        System.out.print(this.leafCharacters.get(count) + ": ");
         for (int loop = 0;
         loop < element.size();
         loop++
@@ -195,7 +199,9 @@ public void preorder()
             }
             System.out.print(element.get(loop) + outputSuffix);
         }
+        System.out.println("\nlength: " + element.size());
         System.out.println("");
+        count++;
     }
 }
 private void preorder(prefixNode inputNode, Object inputList)
@@ -212,13 +218,22 @@ private void preorder(prefixNode inputNode, Object inputList)
     &&  null == inputNode.rightChild
     ) {
         this.leafPaths.add(leftArgument);
-        // TODO Find a place to put the character.
+        this.leafCharacters.add(inputNode.character);
+        return;
     }
     if (null != inputNode.leftChild) {
         leftArgument.add(0);
         this.preorder(inputNode.leftChild, leftArgument.clone());
     }
     if (null != inputNode.rightChild) {
+        /*
+         * The initial value for an empty list is 0, which works fine for the
+         * leftChild, but not os well for rightChild. Lets clear the list, and
+         * start over for the root node.
+         */
+        if (inputNode == this.root) {
+            rightArgument.clear();
+        }
         rightArgument.add(1);
         this.preorder(inputNode.rightChild, rightArgument.clone());
     }
