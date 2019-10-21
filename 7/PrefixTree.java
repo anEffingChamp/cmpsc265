@@ -91,7 +91,8 @@ public PrefixTree()
      * We assume that this is an interior node until told otherwise. The root
      * node is an interior node by necessity.
      */
-    this.root = new prefixNode('*');
+    this.root         = new prefixNode('*');
+    this.leafPaths    = new ArrayList<ArrayList<Integer>>();
     Scanner userInput = new Scanner(System.in);
     System.out.println("Please enter the preorder traversal of a binary tree.");
     /*
@@ -182,22 +183,7 @@ private void addCharacter(prefixNode input)
  */
 public void preorder()
 {
-    if (null != this.root.leftChild) {
-        ArrayList<Integer> leftArgument = new ArrayList<Integer>();
-        /*
-         * ArrayList<> sits in memory, and is not truly a local variable. We
-         * need to clone the list at each step to avoid acting on the globally
-         * available list.
-         */
-        leftArgument.add(0);
-        this.preorder(this.root.leftChild, leftArgument.clone());
-    }
-    if (null != this.root.rightChild) {
-        ArrayList<Integer> rightArgument = new ArrayList<Integer>();
-        rightArgument.add(1);
-        this.preorder(this.root.rightChild, rightArgument.clone());
-    }
-    /*
+    this.preorder(this.root, new ArrayList<Integer>());
     for (ArrayList<Integer> element: this.leafPaths) {
         for (int loop = 0;
         loop < element.size();
@@ -211,7 +197,6 @@ public void preorder()
         }
         System.out.println("");
     }
-    */
 }
 private void preorder(prefixNode inputNode, Object inputList)
 {
@@ -226,7 +211,7 @@ private void preorder(prefixNode inputNode, Object inputList)
     if (null == inputNode.leftChild
     &&  null == inputNode.rightChild
     ) {
-        //this.leafPaths.add(leftArgument);
+        this.leafPaths.add(leftArgument);
         // TODO Find a place to put the character.
     }
     if (null != inputNode.leftChild) {
