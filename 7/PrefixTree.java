@@ -251,26 +251,34 @@ private void preorder(prefixNode inputNode, Object inputList)
 public void uncompress()
 {
     System.out.println("Please input a binary encoded string to decompress.");
-    this.queueString(userInput.next());
+    String userString = userInput.next();
+    this.queueString(userString);
+    int bitCount = 0;
     while (null != this.queue.peek()) {
-        this.uncompress(this.root);
+        bitCount += this.uncompress(this.root);
     }
+    System.out.println("number of bits: " + bitCount);
+    System.out.println("number of characters: " + userString.length());
+    System.out.println(
+        "compression ratio: " + (bitCount / userString.length()) * 100 + "%"
+    );
 }
-private void uncompress(prefixNode input)
+private int uncompress(prefixNode input)
 {
     if ('*' != input.character) {
-        System.out.print(input.character);
-        return;
+        return 1;
     }
     char queueCharacter = this.queue.poll();
+    int bitCount        = 1;
     switch (queueCharacter) {
     case '1':
-        this.uncompress(input.rightChild);
+        bitCount += this.uncompress(input.rightChild);
         break;
     default:
     case '0':
-        this.uncompress(input.leftChild);
+        bitCount += this.uncompress(input.leftChild);
     }
+    return bitCount;
 }
 /**
  * queueString() accepts a string, and adds it to this.queue for parsing.
