@@ -96,7 +96,6 @@ public PrefixTree()
     loop < inputCharachers.length;
     loop++
     ) {
-        System.out.println(inputCharachers[loop]);
         this.queue.add(inputCharachers[loop]);
     }
     /*
@@ -105,7 +104,12 @@ public PrefixTree()
      * internally, but disregard the first characher to better align with the
      * assignment.
      */
-    this.queue.remove();
+    if (null != this.queue.peek()) {
+        this.queue.remove();
+    }
+    while (null != this.queue.peek()) {
+        this.addCharacter(this);
+    }
 }
 /**
  * PrefixTree() also accepts a character as input so that we can assign
@@ -114,6 +118,57 @@ public PrefixTree()
 private PrefixTree(char input)
 {
     this.character = input;
+}
+/**
+ * addCharacter() adds a character to the PrefixTree{}. It accepts a
+ * PrefixTree{} as input, and navigates this.queue until it finds a character to
+ * indicate a leaf node.
+ */
+private void addCharacter(PrefixTree input)
+{
+    /*
+     * We can exit early if we have emptied the queue.
+     */
+    if (true == this.queue.isEmpty()) {
+        return;
+    }
+    /*
+     * Otherwise lets find a home for this new subtree.
+     */
+    char nextCharacter  = this.queue.poll();
+    PrefixTree nextTree = new PrefixTree(nextCharacter);
+    switch (nextCharacter) {
+    case '*':
+        if (null == input.leftChild) {
+            input.leftChild = nextTree;
+        }
+        if ('*' == input.leftChild.character) {
+            this.addCharacter(input.leftChild);
+            return;
+        }
+        if (null == input.rightChild) {
+            input.rightChild = nextTree;
+        }
+        if ('*' == input.rightChild.character) {
+            this.addCharacter(input.rightChild);
+        }
+        return;
+    /*
+     * Any other character is our base case. We write is as a leaf node, and
+     * start over.
+     */
+    default:
+        if (null == input.leftChild) {
+            input.leftChild = nextTree;
+            return;
+        }
+        input.rightChild = nextTree;
+        /*
+         * There may be some cases where a user has not planned the PrefixTree{}
+         * when writing their input, and attempts to overwrite existing leaf
+         * nodes. In those cases, we ignore the character.
+         */
+    }
 }
 public static void main(String[] args) throws IOException
 {
