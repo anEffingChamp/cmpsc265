@@ -245,7 +245,8 @@ public ArrayList<ArrayList<Integer>> getPaths()
  * of its argument ArrayList<> on each step, and adds that ArrayList<> to
  * this.leafPaths when it finds a leaf node.
  */
-private void findLeaf(Node inputNode, Object input) {
+private void findLeaf(Node inputNode, Object input)
+{
     @SuppressWarnings("unchecked")
     ArrayList<Integer> argument = (ArrayList) input;
     argument.add(inputNode.iData);

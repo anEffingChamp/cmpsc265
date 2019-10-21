@@ -64,10 +64,23 @@ public class PrefixTree
  * might look like:public class PrefixTree {private char character;private
  * PrefixTree left;private PrefixTree right;}
  */
-private char character;
-private PrefixTree leftChild;
-private PrefixTree rightChild;
+private prefixNode root;
 private Queue<Character> queue;
+private ArrayList<ArrayList<Integer>> leafPaths;
+    private static class prefixNode
+    {
+    public char character;
+    public prefixNode leftChild;         // this prefixNode's left child
+    public prefixNode rightChild;        // this prefixNode's right child
+    /**
+     * prefixNode() also accepts a character as input so that we can assign
+     * attributes right away.
+     */
+    public prefixNode(char input)
+    {
+        this.character = input;
+    }
+    }
 /**
  * Design the constructor so that it reads in the preorder traversal of a tree
  * from standard input, and reconstructs it.
@@ -78,7 +91,7 @@ public PrefixTree()
      * We assume that this is an interior node until told otherwise. The root
      * node is an interior node by necessity.
      */
-    this.character    = '*';
+    this.root = new prefixNode('*');
     Scanner userInput = new Scanner(System.in);
     System.out.println("Please enter the preorder traversal of a binary tree.");
     /*
@@ -108,23 +121,15 @@ public PrefixTree()
         this.queue.remove();
     }
     while (null != this.queue.peek()) {
-        this.addCharacter(this);
+        this.addCharacter(this.root);
     }
 }
 /**
- * PrefixTree() also accepts a character as input so that we can assign
- * attributes right away.
- */
-private PrefixTree(char input)
-{
-    this.character = input;
-}
-/**
  * addCharacter() adds a character to the PrefixTree{}. It accepts a
- * PrefixTree{} as input, and navigates this.queue until it finds a character to
+ * prefixNode{} as input, and navigates this.queue until it finds a character to
  * indicate a leaf node.
  */
-private void addCharacter(PrefixTree input)
+private void addCharacter(prefixNode input)
 {
     /*
      * We can exit early if we have emptied the queue.
@@ -136,18 +141,18 @@ private void addCharacter(PrefixTree input)
      * Otherwise lets find a home for this new subtree.
      */
     char nextCharacter  = this.queue.poll();
-    PrefixTree nextTree = new PrefixTree(nextCharacter);
+    prefixNode nextNode = new prefixNode(nextCharacter);
     switch (nextCharacter) {
     case '*':
         if (null == input.leftChild) {
-            input.leftChild = nextTree;
+            input.leftChild = nextNode;
         }
         if ('*' == input.leftChild.character) {
             this.addCharacter(input.leftChild);
             return;
         }
         if (null == input.rightChild) {
-            input.rightChild = nextTree;
+            input.rightChild = nextNode;
         }
         if ('*' == input.rightChild.character) {
             this.addCharacter(input.rightChild);
@@ -159,10 +164,10 @@ private void addCharacter(PrefixTree input)
      */
     default:
         if (null == input.leftChild) {
-            input.leftChild = nextTree;
+            input.leftChild = nextNode;
             return;
         }
-        input.rightChild = nextTree;
+        input.rightChild = nextNode;
         /*
          * There may be some cases where a user has not planned the PrefixTree{}
          * when writing their input, and attempts to overwrite existing leaf
@@ -170,8 +175,72 @@ private void addCharacter(PrefixTree input)
          */
     }
 }
+/**
+ * Part 2: Tree traversal.  Include and implement a method preorder that
+ * traverses the binary tree in preorder, and prints a list of characters in the
+ * tree, the length (number of bits) of their encoding, and the encoding.
+ */
+public void preorder()
+{
+    if (null != this.root.leftChild) {
+        ArrayList<Integer> leftArgument = new ArrayList<Integer>();
+        /*
+         * ArrayList<> sits in memory, and is not truly a local variable. We
+         * need to clone the list at each step to avoid acting on the globally
+         * available list.
+         */
+        leftArgument.add(0);
+        this.preorder(this.root.leftChild, leftArgument.clone());
+    }
+    if (null != this.root.rightChild) {
+        ArrayList<Integer> rightArgument = new ArrayList<Integer>();
+        rightArgument.add(1);
+        this.preorder(this.root.rightChild, rightArgument.clone());
+    }
+    /*
+    for (ArrayList<Integer> element: this.leafPaths) {
+        for (int loop = 0;
+        loop < element.size();
+        loop++
+        ) {
+            String outputSuffix = "->";
+            if (loop == element.size() - 1) {
+                outputSuffix = "";
+            }
+            System.out.print(element.get(loop) + outputSuffix);
+        }
+        System.out.println("");
+    }
+    */
+}
+private void preorder(prefixNode inputNode, Object inputList)
+{
+    @SuppressWarnings("unchecked")
+    ArrayList<Integer> leftArgument = (ArrayList) inputList;
+    @SuppressWarnings("unchecked")
+    ArrayList<Integer> rightArgument = (ArrayList) inputList;
+    /*
+     * We have found a leaf node when we have no more children to follow. We can
+     * add the mapped path to our list.
+     */
+    if (null == inputNode.leftChild
+    &&  null == inputNode.rightChild
+    ) {
+        //this.leafPaths.add(leftArgument);
+        // TODO Find a place to put the character.
+    }
+    if (null != inputNode.leftChild) {
+        leftArgument.add(0);
+        this.preorder(inputNode.leftChild, leftArgument.clone());
+    }
+    if (null != inputNode.rightChild) {
+        rightArgument.add(1);
+        this.preorder(inputNode.rightChild, rightArgument.clone());
+    }
+}
 public static void main(String[] args) throws IOException
 {
     PrefixTree treeRoot = new PrefixTree();
+    treeRoot.preorder();
 }
 }
