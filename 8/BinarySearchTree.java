@@ -44,7 +44,6 @@ public void insert(int id) {
         else parent.right = newNode;
     }
 }  // end insert()
-
 /*
  * Please finish the isBST()method in the BinarySearchTree class that will
  * determine whether the tree is a binary search tree or not.Please remember a
@@ -60,11 +59,54 @@ public void insert(int id) {
  * @param none
  * @return true or false indicating whether the tree is a binary search tree
  */
-public boolean isBST(){
-    // YOUR CODES
-    return false;  // for compilation. You need to change it.
+public boolean isBST()
+{
+    return this.isBinarySearchTree(this.root);
 }
-
+/**
+ * isBinarySearchTree() accepts a node as input, and checks whether its left
+ * node is less than, and right node is greater than its own value. Then it
+ * recursively calls its self to fully navigate the tree.
+ */
+private boolean isBinarySearchTree(Node input)
+{
+    boolean leftTree  = false;
+    boolean rightTree = false;
+    /*
+     * A leaf node is a valid subtree of a BST, so we can safely return true.
+     */
+    if (null == input.left
+    &&  null == input.right
+    ) {
+        return true;
+    }
+    /*
+     * Otherwise we need to evaluate all subtrees below this node. Lets check
+     * their values.
+     */
+    if (null == input.left) {
+        leftTree = true;
+    }
+    if (null == input.right) {
+        rightTree = true;
+    }
+    if (null       != input.left
+    &&  input.data >= input.left.data
+    ) {
+        leftTree = this.isBinarySearchTree(input.left);
+    }
+    if (null       != input.right
+    &&  input.data <= input.right.data
+    ) {
+        rightTree = this.isBinarySearchTree(input.right);
+    }
+    if (true == leftTree
+    &&  true == rightTree
+    ) {
+        return true;
+    }
+    return false;
+}
 /*
  * @param two nodes
  * @return the data of the node which is the lowest common ancestor of node p and q;
