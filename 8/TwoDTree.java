@@ -74,26 +74,9 @@ public void insert(Point2D input)
 private void _insertNode(Node currentNode, Node input, int currentLevel)
 {
     Node nextNode = currentNode.left;
-    int direction = 0;
-    /*
-     * We insert according to the X coordinate on odd numbered levels. We decide
-     * on the next motion through the binary tree here, although we execute it
-     * later in the method.
-     */
-    if (1 == currentLevel % 2) {
-        if (currentNode.p.x <= input.p.x) {
-            nextNode  = currentNode.right;
-            direction = 1;
-        }
-    }
-    /*
-     * We insert by the Y coordinate on even numbered levels.
-     */
-    if (0 == currentLevel % 2) {
-        if (currentNode.p.y <= input.p.y) {
-            nextNode  = currentNode.right;
-            direction = 1;
-        }
+    int direction = this._nextNode(currentNode, input.p, currentLevel);
+    if (0 < direction) {
+        nextNode = currentNode.right;
     }
     /*
      * Is the nextNode null? In that case we can safely insert the input node,
@@ -112,9 +95,45 @@ private void _insertNode(Node currentNode, Node input, int currentLevel)
     }
     this._insertNode(nextNode, input, currentLevel++);
 }
+/**
+ * _nextNode() centralizes the logic to decide which direction to take next. It
+ * accepts a node argument to evaluate against a Point2D, and the level to
+ * indicate which coordinate to use.
+ */
+private int _nextNode(Node currentNode, Point2D input, int currentLevel)
+{
+    int output = -1;
+    /*
+     * We insert according to the X coordinate on odd numbered levels. We decide
+     * on the next motion through the binary tree here, although we execute it
+     * later in the calling method.
+     */
+    if (1 == currentLevel % 2) {
+        if (currentNode.p.x <= input.x) {
+            output = 1;
+        }
+    }
+    /*
+     * We insert by the Y coordinate on even numbered levels.
+     */
+    if (0 == currentLevel % 2) {
+        if (currentNode.p.y <= input.y) {
+            output = 1;
+        }
+    }
+    return output;
+}
+/**
+ * search() calls _findPoint() to determine whether a Point2D is in the tree.
+ */
 public boolean search(Point2D input){
     return this._findPoint(this.root, input, 1);
 }
+/**
+ * _findPoint() recursively descends through the tree to determine whether a
+ * given Point2D input is in the tree. It uses _nextNode() to decide on which
+ * direction to take.
+ */
 private boolean _findPoint(Node currentNode, Point2D input, int currentLevel) {
     if (null == currentNode) {
         return false;
@@ -125,17 +144,11 @@ private boolean _findPoint(Node currentNode, Point2D input, int currentLevel) {
         return true;
     }
     Node nextNode = currentNode.left;
-    if (1 == currentLevel % 2
-    &&  currentNode.p.x <= input.x
-    ) {
+    int direction = this._nextNode(currentNode, input, currentLevel);
+    if (0 < direction) {
         nextNode = currentNode.right;
     }
-    if (0               == currentLevel % 2
-    &&  currentNode.p.y <= input.y
-    ) {
-        nextNode = currentNode.right;
-    }
-    return this._findPoint(nextNode, input, ++currentLevel);
+    return this._findPoint(nextNode, input, currentLevel++);
 }
 /**
  * _printNode() writes the X, Y coordinates of a node to the screen.
