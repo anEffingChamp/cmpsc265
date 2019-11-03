@@ -20,6 +20,7 @@ import java.io.*;
 public class TwoDTree
 {
 private Node root; // root of the KdTree
+private ArrayList<Node> queue;
 
 private static class Point2D {
     double x;
@@ -111,11 +112,47 @@ public boolean search(Point2D p){
     // YOUR CODES
     return false; // for compilation. you need to change it.
 }
-
-public void display(){
-    // YOUR CODES
+/**
+ * _printNode() writes the X, Y coordinates of a node to the screen.
+ */
+private String _printNode(Node input)
+{
+    return "(" + input.p.x + ", " + input.p.y + ")";
 }
-
+/**
+ * Displaythe tree by level-order traversal:  the display () method
+ * shoulddisplay all the points on the tree in level-order. This code is adapted
+ * from BinaryTree::displayTree() in assignment 7.
+ */
+public void display() {
+    Queue<Node> q = new LinkedList<Node>();
+    q.add(root);
+    while (!q.isEmpty()) {
+      Node current = q.poll();
+      System.out.println(this._printNode(current));
+      if (current.left!=null) {
+        System.out.print(
+            this._printNode(current) + " "
+            + "Left: " + this._printNode(current.left) + "\t"
+        );
+        q.add(current.left);
+      }
+      else {
+        System.out.print(this._printNode(current) + " " + "Left:NULL" + "\t");
+      }
+      if (current.right!=null) {
+        System.out.print(
+            this._printNode(current) + " "
+            + "Right: " + this._printNode(current.right) + "\n"
+        );
+        q.add(current.right);
+      }
+      else {
+        System.out.println(this._printNode(current) + " " + "Right:NULL");
+      }
+    }
+    System.out.println();
+  }
 public static void main(String[] args) throws Exception {
     // 1. YOUR CODES to Read file and build the tree by insertion
     // 2. Display the TwoDTree in Level-Order
