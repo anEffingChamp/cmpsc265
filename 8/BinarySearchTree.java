@@ -1,4 +1,5 @@
 //package Chap08.tree;
+//
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -108,16 +109,89 @@ private boolean isBinarySearchTree(Node input)
     }
     return false;
 }
-/*
+/**
+ * Given a binary search tree (BST), find the lowest common ancestor (LCA) of
+ * two given nodes in the BST.According to the definition of LCA on Wikipedia:
+ *
+ * The lowest common ancestor is defined between two nodes p and q as the
+ * lowest node in T that has both p and q as descendants (a node can be a
+ * descendant of itself)
+ *
  * @param two nodes
  * @return the data of the node which is the lowest common ancestor of node p and q;
  * @return -1 if either p or q does not exist in the tree
  */
-public int getLCA(Node p, Node q){
-    return -1; // for compilation.
+public int getLCA(Node p, Node q)
+{
+    return this._getLowestCommonAncestor(this.root, p, q);
 }
-
-public static void main(String[] args){
+private int _getLowestCommonAncestor(
+    Node input,
+    Node firstTarget,
+    Node secondTarget
+) {
+    /*
+     * If the values in both target nodes are both lessor or greater than our
+     * current data, they probably have a common ancestor in the same subtree.
+     * We can disregard the other subtree entirely.
+     */
+    if (input.data > firstTarget.data
+    &&  input.data > secondTarget.data
+    ) {
+        return this._getLowestCommonAncestor(input.left, firstTarget, secondTarget);
+    }
+    if (input.data < firstTarget.data
+    &&  input.data < secondTarget.data
+    ) {
+        return this._getLowestCommonAncestor(input.right, firstTarget, secondTarget);
+    }
+    /*
+     * If we have already found one of the values, we simply need to verify that
+     * the other exists in the tree.
+     */
+    if ((input.data == firstTarget.data
+        &&  false   != this._findNode(input, secondTarget)
+        )
+    || (input.data  == secondTarget.data
+        &&  false   != this._findNode(input, firstTarget)
+        )
+    ) {
+        return input.data;
+    }
+    /*
+     * The same is true if one value is greater, and the other is lessor than
+     * the input.data. In that case we just need to find the target nodes to
+     * verify that they are in the tree.
+     */
+    if (false != this._findNode(input, firstTarget)
+    &&  false != this._findNode(input, secondTarget)
+    ) {
+        return input.data;
+    }
+    return -1;
+}
+/**
+ * _findNode() verifies that a single node exists in a given tree.
+ */
+private boolean _findNode(Node input, Node target)
+{
+    Node nextNode = null;
+    if (null == input) {
+        return false;
+    }
+    if (input.data == target.data) {
+        return true;
+    }
+    if (input.data > target.data) {
+        nextNode = input.left;
+    }
+    if (input.data < target.data) {
+        nextNode = input.right;
+    }
+    return this._findNode(nextNode, target);
+}
+public static void main(String[] args)
+{
     Node root1 = new Node(2);
     Node left1 = new Node(1);
     Node right1 = new Node(3);
@@ -150,6 +224,22 @@ public static void main(String[] args){
     // node 0 and node 3
     // node 2 and node 10
     // node 1 and node 3
+    System.out.println(
+        "The lowest ancestor for 2 and 8 is: "
+        + tree3.getLCA(new Node(2), new Node(8))
+    );
+    System.out.println(
+        "The lowest ancestor for 0 and 3 is: "
+        + tree3.getLCA(new Node(0), new Node(3))
+    );
+    System.out.println(
+        "The lowest ancestor for 2 and 10 is: "
+        + tree3.getLCA(new Node(2), new Node(10))
+    );
+    System.out.println(
+        "The lowest ancestor for 1 and 3 is: "
+        + tree3.getLCA(new Node(1), new Node(3))
+    );
 }
 }
 //-------------------------------------------------------------
