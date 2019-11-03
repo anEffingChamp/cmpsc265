@@ -62,6 +62,7 @@ public void insert(Point2D input)
      */
     if (null == this.root) {
         this.root = nextNode;
+        return;
     }
     this._insertNode(this.root, nextNode, 1);
 }
@@ -109,10 +110,7 @@ private void _insertNode(Node currentNode, Node input, int currentLevel)
         }
         return;
     }
-    System.out.println(nextNode.p.x);
-    System.out.println(input.p.x);
-    return;
-    //this._insertNode(nextNode, input, currentLevel++);
+    this._insertNode(nextNode, input, currentLevel++);
 }
 public boolean search(Point2D p){
     // YOUR CODES
@@ -134,11 +132,7 @@ public void display()
 {
     Queue<Node> q = new LinkedList<Node>();
     q.add(root);
-    int count = 0;
     while (!q.isEmpty()) {
-        if (count > 10) {
-            break;
-        }
       Node current = q.poll();
       if (current.left!=null) {
         System.out.print(
@@ -159,7 +153,6 @@ public void display()
       else {
         System.out.println(" " + "Right:NULL");
       }
-      count++;
     }
     System.out.println();
 }
@@ -172,11 +165,7 @@ public static void main(String[] args) throws Exception {
          * https://www.java67.com/2012/11/how-to-read-file-in-java-using-scanner-example.html
          */
         Scanner fileInput = new Scanner(new File("input10K.txt"));
-        int count = 0;
         while (true == fileInput.hasNextLine()) {
-            if (count > 10) {
-                break;
-            }
             String nextLine     = fileInput.nextLine();
             String[] nextValues = nextLine.split(" ");
             fileTree.insert(
@@ -185,7 +174,6 @@ public static void main(String[] args) throws Exception {
                     Double.parseDouble(nextValues[1])
                 )
             );
-            count++;
         }
     } catch(FileNotFoundException exception) {
         System.out.println("The file was not found.");
