@@ -112,9 +112,30 @@ private void _insertNode(Node currentNode, Node input, int currentLevel)
     }
     this._insertNode(nextNode, input, currentLevel++);
 }
-public boolean search(Point2D p){
-    // YOUR CODES
-    return false; // for compilation. you need to change it.
+public boolean search(Point2D input){
+    return this._findPoint(this.root, input, 1);
+}
+private boolean _findPoint(Node currentNode, Point2D input, int currentLevel) {
+    if (null == currentNode) {
+        return false;
+    }
+    if (currentNode.p.x == input.x
+    &&  currentNode.p.y == input.y
+    ) {
+        return true;
+    }
+    Node nextNode = currentNode.left;
+    if (1 == currentLevel % 2
+    &&  currentNode.p.x <= input.x
+    ) {
+        nextNode = currentNode.right;
+    }
+    if (0               == currentLevel % 2
+    &&  currentNode.p.y <= input.y
+    ) {
+        nextNode = currentNode.right;
+    }
+    return this._findPoint(nextNode, input, ++currentLevel);
 }
 /**
  * _printNode() writes the X, Y coordinates of a node to the screen.
@@ -182,5 +203,15 @@ public static void main(String[] args) throws Exception {
     // 2. Display the TwoDTree in Level-Order
     fileTree.display();
     // 3. Search for some arbitrary points.
+    Point2D testPoint = new Point2D(0.83415, 0.810859);
+    System.out.println(
+        "Is point (" + testPoint.x + ", " + testPoint.y + ") on the tree? "
+        + fileTree.search(testPoint)
+    );
+    testPoint = new Point2D(0.84, 0.8919);
+    System.out.println(
+        "Is point (" + testPoint.x + ", " + testPoint.y + ") on the tree? "
+        + fileTree.search(testPoint)
+    );
 }
 }
