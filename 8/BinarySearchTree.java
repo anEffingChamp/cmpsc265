@@ -224,22 +224,23 @@ public static void main(String[] args)
     // node 0 and node 3
     // node 2 and node 10
     // node 1 and node 3
-    System.out.println(
-        "The lowest ancestor for 2 and 8 is: "
-        + tree3.getLCA(new Node(2), new Node(8))
-    );
-    System.out.println(
-        "The lowest ancestor for 0 and 3 is: "
-        + tree3.getLCA(new Node(0), new Node(3))
-    );
-    System.out.println(
-        "The lowest ancestor for 2 and 10 is: "
-        + tree3.getLCA(new Node(2), new Node(10))
-    );
-    System.out.println(
-        "The lowest ancestor for 1 and 3 is: "
-        + tree3.getLCA(new Node(1), new Node(3))
-    );
+    int[] arguments = {2, 8, 0, 3, 2, 10, 1, 3};
+    for (int loop = 0;
+    loop < arguments.length;
+    loop += 2
+    ) {
+        int output = tree3.getLCA(
+            new Node(arguments[loop]), new Node(arguments[loop + 1])
+        );
+        if (-1 == output) {
+            System.out.println("One or both nodes is missing from the tree.");
+            continue;
+        }
+        System.out.println(
+            "The lowest ancestor for " + arguments[loop] + " and "
+            + arguments[loop + 1] + " is: " + output
+        );
+    }
 }
 }
 //-------------------------------------------------------------
