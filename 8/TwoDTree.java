@@ -124,7 +124,8 @@ private String _printNode(Node input)
  * shoulddisplay all the points on the tree in level-order. This code is adapted
  * from BinaryTree::displayTree() in assignment 7.
  */
-public void display() {
+public void display()
+{
     Queue<Node> q = new LinkedList<Node>();
     q.add(root);
     while (!q.isEmpty()) {
@@ -152,10 +153,35 @@ public void display() {
       }
     }
     System.out.println();
-  }
+}
 public static void main(String[] args) throws Exception {
     // 1. YOUR CODES to Read file and build the tree by insertion
+    TwoDTree fileTree = new TwoDTree();
+    try {
+        /*
+         * We read the file according to the instructions at Java67.
+         * https://www.java67.com/2012/11/how-to-read-file-in-java-using-scanner-example.html
+         */
+        Scanner fileInput     = new Scanner(new File("input10K.txt"));
+        double fileCoordinate = 0;
+        int countCoordinates  = 0;
+        while (true == fileInput.hasNext()) {
+            if (0 == countCoordinates % 2) {
+                fileTree.insert(
+                    new Point2D(fileCoordinate, fileInput.nextDouble())
+                );
+            }
+            if (1 == countCoordinates % 2) {
+                fileCoordinate = fileInput.nextDouble();
+            }
+            countCoordinates++;
+        }
+    } catch(FileNotFoundException exception) {
+        System.out.println("The file was not found.");
+        return;
+    }
     // 2. Display the TwoDTree in Level-Order
+    fileTree.display();
     // 3. Search for some arbitrary points.
 }
 }
