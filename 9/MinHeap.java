@@ -32,19 +32,42 @@ public static class Node {
 
 public MinHeap(int mx)            // constructor
 {
-    maxSize = mx;
+    maxSize     = mx;
     currentSize = 0;
-    heapArray = new Node[maxSize];  // create array
+    heapArray   = new Node[maxSize];  // create array
 }
 
 // -------------------------------------------------------------
 public boolean isEmpty()
 { return currentSize==0; }
 
-// -------------------------------------------------------------
+/**
+ * insert() adds a node to MinHeap{} such that all of its ancestor nodes are
+ * less than its value. It is a boolean, although we never use the return value
+ * in this exercise.
+ */
 public boolean insert(int key)
-    {// YOUR CODES
-    return false;  //For compilation. You need to change it.
+{
+    Node newNode = new Node(key);
+    /*
+     * We can insert the root node if the heap is currently empty. No other
+     * comparisons are necessary.
+     */
+    if (null == this.heapArray[0]) {
+        this.heapArray[0] = newNode;
+        return false;
+    }
+    if (key >= this.heapArray[0].iData) {
+        if (null == this.heapArray[1]) {
+            this.heapArray[1] = newNode;
+        }
+        this.heapArray[2] = newNode;
+    }
+    /*
+     * On the other hand, we need to replace the root node if the value is less
+     * than it, and find a new position for what what previously the root node.
+     */
+    return false;
 }
 // -------------------------------------------------------------
 public void trickleUp(int index) {
@@ -121,8 +144,8 @@ public static void main(String[] args) throws Exception {
     theHeap.insert(90);
 
     while (!theHeap.isEmpty()) {
-    Node node = theHeap.remove();
-    System.out.println(node.getKey());
+        Node node = theHeap.remove();
+        System.out.println(node.getKey());
     }
 }  // end main()
 }
