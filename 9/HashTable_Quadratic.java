@@ -62,9 +62,20 @@ public void insert(String input) // insert a DataItem
     loop++
     ) {
         stringInteger +=
-            (int) input.charAt(loop) * Math.pow(26, input.length() - loop - 1);
+            (int) input.charAt(loop) * Math.pow(26, input.length() - loop);
     }
-    System.out.println(stringInteger);
+    int hash = stringInteger % this.arraySize;
+    if (null == this.hashArray[hash]) {
+        this.hashArray[hash] = input;
+        return;
+    }
+    int loop      = 1;
+    int hashProbe = hash + (int) Math.pow(loop, 2);
+    while (null != this.hashArray[hashProbe % this.arraySize]) {
+        loop++;
+        hashProbe = hash + (int) Math.pow(loop, 2);
+    }
+    this.hashArray[hashProbe % this.arraySize] = input;
 }
   // -------------------------------------------------------------
 
