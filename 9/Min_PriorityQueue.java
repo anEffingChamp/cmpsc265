@@ -1,9 +1,9 @@
 public class Min_PriorityQueue
 {
- // array in sorted order, from max at 0 to min at size-1
- private int maxSize;
- private MinHeap theHeap;
- private int nItems;
+// array in sorted order, from max at 0 to min at size-1
+private int maxSize;
+private MinHeap theHeap;
+private int nItems;
     /**
      * The attached Min_PrioriyQueue.java file contains the definition of the
      * Min_PriorityQueue class.Please finish the implementation of the method of
@@ -24,9 +24,9 @@ public class Min_PriorityQueue
      * Min_PriorityQueue class as required.
      */
     public class MinHeap {
-    private Node[] heapArray;
-    private int maxSize;           // size of array
-    private int currentSize;       // number of nodes in array
+    protected Node[] heapArray;
+    protected int maxSize;           // size of array
+    protected int currentSize;       // number of nodes in array
 
     public class Node {
         private int iData;             // data item (key)
@@ -103,12 +103,12 @@ public class Min_PriorityQueue
      * tree, positions it at the root node, and lets it sink down to a new
      * position to maintain the heap.
      */
-    public Node remove()
+    public int remove()
     {
         Node output       = this.heapArray[0];
         this.heapArray[0] = this.heapArray[--this.currentSize];
         this.trickleDown(0);
-        return output;
+        return output.getKey();
     }
     /**
      * trickleDown() finds a new position for a Node if we need to replace it.
@@ -178,41 +178,55 @@ public class Min_PriorityQueue
         System.out.println("\n"+dots+dots); // dotted bottom line
     }  // end displayHeap()
     }
- public Min_PriorityQueue(int size) // constructor
- {  // YOUR CODES
- }
+public Min_PriorityQueue(int size) // constructor
+{
+    this.theHeap = new MinHeap(size);
+}
 /**
- * insert() adds a node to the priority queue.
+ * insert() adds a node to the this.theHeap.
  */
 public void insert(int input) // insert item
 {
     this.theHeap.insert(input);
 }
-
- public int remove() // remove minimum item
- { // YOUR CODES
-  return -1;  // for compilation. you need to change it.
- }
-
- // -------------------------------------------------------------
- public int peek() // peek at minimum item
- { // YOUR CODES
-  return -1;  // for compilation. You need to change it.
- }
-
- // -------------------------------------------------------------
- public boolean isEmpty() // true if queue is empty
- {
-  // YOUR CODES
-  return false; // for compilation. you need to change it.
- }
-
- // -------------------------------------------------------------
- public boolean isFull() // true if queue is full
- {
-  // YOUR CODES
-  return false;  // for compilation. You need to change it.
- }
+/**
+ * remove() removes the root node from this.theHeap, and returns its value for
+ * further processing.
+ */
+public int remove() // remove minimum item
+{
+    return this.theHeap.remove();
+}
+/**
+ * peek() lets us see what the minimum value of the heap currently is.
+ */
+public int peek() // peek at minimum item
+{
+    return this.theHeap.heapArray[0].getKey();
+}
+/**
+ * isEmpty() returns true if the root node of this.theHeap is null. Otherwise it
+ * returns false.
+ */
+public boolean isEmpty() // true if queue is empty
+{
+    boolean output = false;
+    if (null != this.theHeap.heapArray[0]) {
+        output = true;
+    }
+    return output;
+}
+/**
+ * isFull() verifies whether this.theHeap can whole any more members.
+ */
+public boolean isFull() // true if queue is full
+{
+    boolean output = false;
+    if (this.theHeap.currentSize == this.theHeap.maxSize) {
+        output = true;
+    }
+    return output;
+}
 
  public static void main(String[] args) {
   Min_PriorityQueue thePQ = new Min_PriorityQueue(5);
