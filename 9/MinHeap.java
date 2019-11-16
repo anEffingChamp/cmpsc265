@@ -48,52 +48,44 @@ public boolean isEmpty()
  */
 public boolean insert(int key)
 {
-    Node newNode = new Node(key);
     /*
-     * We can insert the root node if the heap is currently empty. No other
-     * comparisons are necessary.
+     * We can not insert a node if the array is full.
      */
-    if (true == this._insertNode(newNode, 0)) {
-        return true;
-    }
-    if (key >= this.heapArray[0].iData) {
-        if (true == this._insertNode(newNode, 1)) {
-            return true;
-        }
-        if (true == this._insertNode(newNode, 2)) {
-            return true;
-        }
+    if (this.currentSize == this.maxSize) {
         return false;
     }
     /*
-     * On the other hand, we need to replace the root node if the value is less
-     * than it, and find a new position for what what was previously the root
-     * node.
+     * Otherwise we insert the node at the end of the heap, and find its proper
+     * position after the fact.
      */
-    Node rootNode     = this.heapArray[0];
-    this.heapArray[0] = newNode;
-    this.insert(rootNode.iData);
-    return false;
-}
-/**
- * _insertNode() attempts to insert a node at a given position, defined by
- * inputIndex. It returns true when successful, and false otherwise.
- */
-private boolean _insertNode(Node inputNode, int inputIndex)
-{
-    boolean output = false;
-    if (null == this.heapArray[inputIndex]) {
-        this.heapArray[inputIndex] = inputNode;
-        this.currentSize++;
-        output = true;
-    }
-    return output;
+    this.heapArray[currentSize] = new Node(key);
+    this.trickleUp(this.currentSize++);
+    return true;
 }
 // -------------------------------------------------------------
-public void trickleUp(int index) {
-    // YOUR CODES
+/*
+ * trickleUp() finds the appropriate position for a target node. It does so by
+ * comparison with each of its parent nodes until we either find a good spot, or
+ * reach the root.
+ */
+public void trickleUp(int input)
+{
+    /*
+     * In a heap the index of the parent node will consistently be half that of
+     * a given input node. So lets start with that.
+     */
+    int parent      = (input - 1) / 2;
+    int target      = input;
+    Node targetNode = this.heapArray[target];
+    while (target > 0
+    &&  this.heapArray[parent].getKey() > this.heapArray[target].getKey()
+    ) {
+        this.heapArray[parent] = this.heapArray[target];
+        target = parent;
+        parent = (target - 1) / 2;
+    }
+    this.heapArray[target] = targetNode;
 }
-
 // -------------------------------------------------------------
 // delete item with max key. Return the reference to the deleted node.
 /**
@@ -121,11 +113,20 @@ public Node remove()
         }
     }
     /*
-     * Once we have the removalIndex, we can nullify that Node, and return it
-     * for further processing.
+     * Once we have the removalIndex, we have a few things to do. We need
+     * to reinsert all subsequent nodes to maintain the heap. Only then
+     * can we nullify that Node, and return it for further processing.
      */
-    this.currentSize--;
     this.heapArray[removalIndex] = null;
+    for (int loop = removalIndex + 1;
+    loop < this.currentSize;
+    loop++
+    ) {
+        int nodeValue        = this.heapArray[loop].iData;
+        this.heapArray[loop] = null;
+        this.insert(nodeValue);
+    }
+    this.currentSize--;
     return output;
 }
 /**
