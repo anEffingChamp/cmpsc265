@@ -55,9 +55,20 @@ public Anagrams(int input)       // constructor
   }
   System.out.println("");
  }
-public int hashFunc(String key)
+/**
+ * hashFunc() turns a string into a hashed integer for comparison with other
+ * strings to evaluate whether they are anagrams.
+ */
+public int hashFunc(String input)
 {
-  return  -1; // For compilation. You need to change it.
+    int stringInteger = 0;
+    for (int loop = 0;
+    loop < input.length();
+    loop++
+    ) {
+        stringInteger += (int) input.charAt(loop);
+    }
+    return stringInteger;
 }
 /**
  * insert() adds a value to the Anagrams{} with quadratic problem to resolve
@@ -68,14 +79,8 @@ public void insert(String input) // insert a DataItem
     /*
      * We convert the string to an integer first.
      */
-    int stringInteger = 0;
-    for (int loop = 0;
-    loop < input.length();
-    loop++
-    ) {
-        stringInteger += (int) input.charAt(loop);
-    }
-    int hashedValue = stringInteger % this.arraySize;
+    int stringInteger = this.hashFunc(input);
+    int hashedValue   = stringInteger % this.arraySize;
     /*
      * We have found a matching stringInteger, so we can add it to this position
      * in the hash table. We already know that index 0 is occupied, so we can
@@ -97,7 +102,8 @@ public void insert(String input) // insert a DataItem
      * initial index in the hash table.
      */
     if (0 == this.hashes[hashedValue]) {
-        this.hashes[hashedValue] = stringInteger;
+        this.hashes[hashedValue]       = stringInteger;
+        this.hashArray[hashedValue][0] = input;
     }
     /**
      * Otherwise we need to keep looking, using linear increments to find an
