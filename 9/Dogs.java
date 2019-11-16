@@ -112,9 +112,6 @@ public String find(String input) // find item with key
 {
     int stringInteger = this.hashFunc(input);
     int hashInitial   = stringInteger % this.arraySize;
-    System.out.println(input);
-    System.out.println(stringInteger);
-    System.out.println(hashInitial);
     /**
      * Lets find an appropriate position using quadratic increments.
      */
@@ -135,7 +132,7 @@ public static void main(String[] args) throws IOException
     Scanner console = new Scanner(System.in);
     System.out.println("Which characters represent chihuahuas? ");
     String userInput = console.next();
-    Dogs table       = new Dogs(userInput.length());
+    Dogs table       = new Dogs(100);
     table.insert(userInput);
     System.out.println("Which characters do we have? ");
     table.dogs       = console.next();
