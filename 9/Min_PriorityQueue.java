@@ -40,23 +40,20 @@ private int nItems;
         public void setKey(int id)
         { iData = id; }
     }
-    // -------------------------------------------------------------
-
     public MinHeap(int mx)            // constructor
     {
         maxSize     = mx;
         currentSize = 0;
         heapArray   = new Node[maxSize];  // create array
     }
-
-    // -------------------------------------------------------------
     public boolean isEmpty()
-    { return currentSize==0; }
-
+    {
+        return currentSize == 0;
+    }
     /**
      * insert() adds a node to MinHeap{} such that all of its ancestor nodes are
-     * less than its value. It is a boolean, although we never use the return value
-     * in this exercise.
+     * less than its value. It is a boolean, although we never use the return
+     * value in this exercise.
      */
     public boolean insert(int key)
     {
@@ -77,9 +74,9 @@ private int nItems;
     }
     // -------------------------------------------------------------
     /*
-     * trickleUp() finds the appropriate position for a target node. It does so by
-     * comparison with each of its parent nodes until we either find a good spot, or
-     * reach the root.
+     * trickleUp() finds the appropriate position for a target node. It does so
+     * by comparison with each of its parent nodes until we either find a good
+     * spot, or reach the root.
      */
     public void trickleUp(int input)
     {
@@ -136,48 +133,6 @@ private int nItems;
             this.trickleDown(targetIndex);
         }
     }
-    // -------------------------------------------------------------
-    public void displayHeap()
-    {
-        System.out.print("heapArray: ");    // array format
-        for(int m=0; m<currentSize; m++)
-         if(heapArray[m] != null)
-            System.out.print( heapArray[m].getKey() + " ");
-         else
-            System.out.print( "-- ");
-        System.out.println();
-                                          // heap format
-        int nBlanks = 32;
-        int itemsPerRow = 1;
-        int column = 0;
-        int j = 0;                          // current item
-        String dots = "...............................";
-        System.out.println(dots+dots);      // dotted top line
-
-        while(currentSize > 0)              // for each heap item
-        {
-        if(column == 0)                  // first item in row?
-          for(int k=0; k<nBlanks; k++)  // preceding blanks
-          System.out.print(' ');
-                                          // display item
-        System.out.print(heapArray[j].getKey());
-
-        if(++j == currentSize)           // done?
-            break;
-
-        if(++column==itemsPerRow)        // end of row?
-        {
-          nBlanks /= 2;                 // half the blanks
-          itemsPerRow *= 2;             // twice the items
-          column = 0;                   // start over on
-          System.out.println();         //    new row
-        }
-        else                             // next item on row
-          for(int k=0; k<nBlanks*2-2; k++)
-          System.out.print(' ');     // interim blanks
-        }  // end for
-        System.out.println("\n"+dots+dots); // dotted bottom line
-    }  // end displayHeap()
     }
 public Min_PriorityQueue(int size) // constructor
 {
@@ -224,8 +179,8 @@ public boolean isFull() // true if queue is full
     }
     return output;
 }
-
- public static void main(String[] args) {
+public static void main(String[] args)
+{
   Min_PriorityQueue thePQ = new Min_PriorityQueue(5);
 
   thePQ.insert(30);
@@ -235,8 +190,8 @@ public boolean isFull() // true if queue is full
   thePQ.insert(20);
 
   while (!thePQ.isEmpty()) {
-   long item = thePQ.remove();
-   System.out.print(item + " "); // 10, 20, 30, 40, 50
+    long item = thePQ.remove();
+    System.out.print(item + " "); // 10, 20, 30, 40, 50
   }
   System.out.println("");
  } // end main()
