@@ -13,7 +13,15 @@ import java.util.*;
 public class Anagrams {
 private String[] hashArray; // array holds hash table
 private int arraySize;
-private ArrayList<String> list;
+/**
+ * Anagrams.list is a two dimensional linked list of strings. We have no
+ * initial idea of how many distinct strings the user will add, so we need the
+ * room to expand along the X axis.
+ *
+ * Once we determine that two strings are anagrams, we can them add them along
+ * the Y axis.
+ */
+private LinkedList<LinkedList<String>> list;
 public Anagrams()       // constructor
 {
 }
@@ -29,12 +37,10 @@ public Anagrams()       // constructor
   }
   System.out.println("");
  }
-
- // -------------------------------------------------------------
- public int hashFunc(String key) {
-  // YOUR CODES
+public int hashFunc(String key)
+{
   return  -1; // For compilation. You need to change it.
- }
+}
 /**
  * insert() adds a value to the HashTable{} with quadratic problem to resolve
  * any collisions.
@@ -50,21 +56,13 @@ public void insert(String input) // insert a DataItem
     loop < input.length();
     loop++
     ) {
-        stringInteger +=
-            (int) input.charAt(loop) * Math.pow(26, input.length() - loop - 1);
+        stringInteger += (int) input.charAt(loop);
     }
     int hash = stringInteger % this.arraySize;
     if (null == this.hashArray[hash]) {
         this.hashArray[hash] = input;
         return;
     }
-    int loop      = 1;
-    int hashProbe = hash + (int) Math.pow(loop, 2);
-    while (null != this.hashArray[hashProbe % this.arraySize]) {
-        loop++;
-        hashProbe = hash + (int) Math.pow(loop, 2);
-    }
-    this.hashArray[hashProbe % this.arraySize] = input;
 }
   // -------------------------------------------------------------
 
