@@ -144,7 +144,7 @@ public static void main(String[] args) throws IOException
 {
     Scanner userConsole   = new Scanner(System.in);
     System.out.print("Please enter a series of strings separated by a space: ");
-    String[] userInput    = userConsole.next().split(" ");
+    String[] userInput    = userConsole.nextLine().split(" ");
     Anagrams anagramTable = new Anagrams(userInput.length);
     for (String element: userInput) {
         anagramTable.insert(element);
