@@ -67,7 +67,8 @@ private int nItems;
             return false;
         }
         /*
-         * Otherwise we insert the node at the end of the heap, and find its proper
+         * Otherwise we insert the node at the end of the heap, and find its
+         * proper
          * position after the fact.
          */
         this.heapArray[currentSize] = new Node(key);
@@ -210,11 +211,7 @@ public int peek() // peek at minimum item
  */
 public boolean isEmpty() // true if queue is empty
 {
-    boolean output = false;
-    if (null != this.theHeap.heapArray[0]) {
-        output = true;
-    }
-    return output;
+    return this.theHeap.isEmpty();
 }
 /**
  * isFull() verifies whether this.theHeap can whole any more members.
