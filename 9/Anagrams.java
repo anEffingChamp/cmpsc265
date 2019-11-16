@@ -84,21 +84,11 @@ public int hashFunc(String input)
 public void insert(String input) // insert a DataItem
 {
     /*
-     * We convert the string to an integer first.
+     * We convert the string to an integer first, and lets find an appropriate
+     * position using quadratic increments.
      */
     int stringInteger = this.hashFunc(input);
-    int hashInitial   = stringInteger % this.arraySize;
-    /**
-     * Lets find an appropriate position using quadratic increments.
-     */
-    int loop      = -1;
-    int hashProbe = hashInitial;
-    while (0          != this.hashes[hashProbe]
-    &&  stringInteger != this.hashes[hashProbe]
-    ) {
-        loop++;
-        hashProbe = hashInitial + (int) Math.pow(loop, 2);
-    }
+    int hashProbe     = Integer.parseInt(this.find(input));
     /*
      * We have found a matching stringInteger, so we can add it to this
      * position in the hash table. We already know that index 0 is occupied,
@@ -132,12 +122,30 @@ public void insert(String input) // insert a DataItem
   return null; // For compilation. You need to change it.
 
  } // end delete()
-  // -------------------------------------------------------------
-
- public String find(String key) // find item with key
- {  // YOUR CODES
-  return null; // For compilation. You need to change it.
- }
+/**
+ * find() uses quadratic probing to find an appropriate index in the hash table
+ * to insert a value.
+ */
+// TODO Why should this function return a String, rather than the numeric index
+// for the appropriate hash? String should be the argument, not the return
+// result.
+public String find(String input) // find item with key
+{
+    int stringInteger = this.hashFunc(input);
+    int hashInitial   = stringInteger % this.arraySize;
+    /**
+     * Lets find an appropriate position using quadratic increments.
+     */
+    int loop      = -1;
+    int hashProbe = hashInitial;
+    while (0          != this.hashes[hashProbe]
+    &&  stringInteger != this.hashes[hashProbe]
+    ) {
+        loop++;
+        hashProbe = hashInitial + (int) Math.pow(loop, 2);
+    }
+    return String.valueOf(hashProbe);
+}
 
  // -------------------------------------------------------------
  // end class HashTable
