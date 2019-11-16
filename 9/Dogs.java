@@ -15,6 +15,12 @@ import java.util.*;
  */
 public class Dogs
 {
+/**
+ * hashes holds the integer values assigned to a given index in
+ * Anagrams.hashArray. This means that I will not have to recalculate the hash
+ * to verify an anagram when finding indices.
+ */
+private int[] hashes;
 private String[] hashArray; // array holds hash table
 private int arraySize;
 public String dogs;
@@ -30,9 +36,20 @@ public Dogs(int size)       // constructor
  */
 public void displayTable()
 {
-    for (String element: this.hashArray) {
-        System.out.println(element);
+    String input = this.dogs;
+    int count    = 0;
+    for (int loop = 0;
+    loop < this.dogs.length();
+    loop++
+    ) {
+        int hashProbe = Integer.parseInt(
+            this.find(String.valueOf(input.charAt(loop)))
+        );
+        if (null != this.hashArray[hashProbe]) {
+            count++;
+        }
     }
+    System.out.println("There are " + count + " chihuahuas in the pack.");
 }
 /*
  * hashFunc() turns a string into a hashed integer for comparison with other
@@ -62,18 +79,17 @@ public void insert(String input) // insert a DataItem
     loop < input.length();
     loop++
     ) {
-        int hash = (int) input.charAt(loop) % this.arraySize;
+        int characterInteger = (int) input.charAt(loop);
+        int hash             = characterInteger % this.arraySize;
         if (null == this.hashArray[hash]) {
             this.hashArray[hash] = input;
             return;
         }
-        int whileLoop      = 1;
-        int hashProbe = hash + (int) Math.pow(whileLoop, 2);
-        while (null != this.hashArray[hashProbe % this.arraySize]) {
-            whileLoop++;
-            hashProbe = hash + (int) Math.pow(whileLoop, 2);
-        }
-        this.hashArray[hashProbe % this.arraySize] = input;
+        int hashProbe = Integer.parseInt(
+            this.find(String.valueOf(input.charAt(loop)))
+        );
+        this.hashes[hashProbe]    = characterInteger;
+        this.hashArray[hashProbe] = input;
     }
 }
   // -------------------------------------------------------------
@@ -85,12 +101,28 @@ public void insert(String input) // insert a DataItem
  } // end delete()
   // -------------------------------------------------------------
 /**
- * find() accepts a String input, and verifies whether it is in the
- * this.hashArray or not. If not, it returns empty string.
+ * find() uses quadratic probing to find an appropriate index in the hash table
+ * to insert a value.
  */
-public String find(String key) // find item with key
+// TODO Why should this function return a String, rather than the numeric index
+// for the appropriate hash? String should be the argument, not the return
+// result.
+public String find(String input) // find item with key
 {
-    return null; // For compilation. You need to change it.
+    int stringInteger = this.hashFunc(input);
+    int hashInitial   = stringInteger % this.arraySize;
+    /**
+     * Lets find an appropriate position using quadratic increments.
+     */
+    int loop      = -1;
+    int hashProbe = hashInitial;
+    while (0          != this.hashes[hashProbe]
+    &&  stringInteger != this.hashes[hashProbe]
+    ) {
+        loop++;
+        hashProbe = hashInitial + (int) Math.pow(loop, 2);
+    }
+    return String.valueOf(hashProbe);
 }
 public static void main(String[] args) throws IOException
 {
