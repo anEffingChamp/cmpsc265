@@ -30,23 +30,34 @@ public Dogs(int size)       // constructor
  */
 public void displayTable()
 {
+    for (String element: this.hashArray) {
+        System.out.println(element);
+    }
 }
- // -------------------------------------------------------------
- public int hashFunc(String key) {
-  // YOUR CODES
-  return  -1; // For compilation. You need to change it.
- }
+/*
+ * hashFunc() turns a string into a hashed integer for comparison with other
+ * strings to evaluate whether they are anagrams.
+ */
+public int hashFunc(String input)
+{
+    int stringInteger = 0;
+    for (int loop = 0;
+    loop < input.length();
+    loop++
+    ) {
+        stringInteger += (int) input.charAt(loop);
+    }
+    return stringInteger;
+}
 /**
  * insert() adds a value to the HashTable{} with quadratic problem to resolve
  * any collisions.
  */
 public void insert(String input) // insert a DataItem
-// (assumes table not full)
 {
     /*
      * We convert the string to an integer first.
      */
-    int stringInteger = 0;
     for (int loop = 0;
     loop < input.length();
     loop++
@@ -73,26 +84,22 @@ public void insert(String input) // insert a DataItem
 
  } // end delete()
   // -------------------------------------------------------------
-
+/**
+ * find() accepts a String input, and verifies whether it is in the
+ * this.hashArray or not. If not, it returns empty string.
+ */
 public String find(String key) // find item with key
 {
     return null; // For compilation. You need to change it.
 }
-
- // -------------------------------------------------------------
- // end class HashTable
-
 public static void main(String[] args) throws IOException
 {
-    int aKey, size, n, keysPerCell;
-
     //get the size of the HashTable
     Scanner console = new Scanner(System.in);
-    System.out.print("Enter size of hash table: ");
-    Dogs table      = new Dogs(console.nextInt());
-
     System.out.println("Which characters represent chihuahuas? ");
-    table.insert(console.next());
+    String userInput = console.next();
+    Dogs table       = new Dogs(userInput.length());
+    table.insert(userInput);
     System.out.println("Which characters do we have? ");
     table.dogs       = console.next();
 
