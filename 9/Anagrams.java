@@ -40,12 +40,13 @@ public Anagrams(int input)       // constructor
  */
 public void displayTable()
 {
-    System.out.print("Table: ");
+    System.out.println("[");
     for (int j = 0;
     j < arraySize;
     j++
     ) {
         if (null != this.hashArray[j][0]) {
+            System.out.print("    [ ");
             for (int loop = 0;
             loop < this.arraySize;
             loop++
@@ -55,10 +56,11 @@ public void displayTable()
                 }
                 System.out.print(this.hashArray[j][loop] + " ");
             }
-        } else
-            System.out.print("** ");
+            System.out.print(" ]");
+            System.out.println();
+        }
     }
-    System.out.println("");
+    System.out.println("]");
 }
 /**
  * hashFunc() turns a string into a hashed integer for comparison with other
