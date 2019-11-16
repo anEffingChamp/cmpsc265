@@ -22,15 +22,6 @@ private String[][] hashArray;
  */
 private int[] hashes;
 private int arraySize;
-/**
- * Anagrams.list is a two dimensional linked list of strings. We have no
- * initial idea of how many distinct strings the user will add, so we need the
- * room to expand along the X axis.
- *
- * Once we determine that two strings are anagrams, we can them add them along
- * the Y axis.
- */
-private LinkedList<LinkedList<String>> list;
 public Anagrams(int input)       // constructor
 {
     /*
@@ -43,18 +34,32 @@ public Anagrams(int input)       // constructor
     this.hashArray = new String[input][input];
     this.hashes    = new int[input];
 }
-
- // -------------------------------------------------------------
- public void displayTable() {
-  System.out.print("Table: ");
-  for (int j = 0; j < arraySize; j++) {
-   if (hashArray[j] != null)
-    System.out.print(hashArray[j] + " ");
-   else
-    System.out.print("** ");
-  }
-  System.out.println("");
- }
+/**
+ * displayTable() loops through this.hashArray in two dimensions, and displays
+ * all of the anagrams.
+ */
+public void displayTable()
+{
+    System.out.print("Table: ");
+    for (int j = 0;
+    j < arraySize;
+    j++
+    ) {
+        if (null != this.hashArray[j][0]) {
+            for (int loop = 0;
+            loop < this.arraySize;
+            loop++
+            ) {
+                if (null == this.hashArray[j][loop]) {
+                    break;
+                }
+                System.out.print(this.hashArray[j][loop] + " ");
+            }
+        } else
+            System.out.print("** ");
+    }
+    System.out.println("");
+}
 /**
  * hashFunc() turns a string into a hashed integer for comparison with other
  * strings to evaluate whether they are anagrams.
@@ -91,31 +96,31 @@ public void insert(String input) // insert a DataItem
     ) {
         loop++;
         hashProbe = hashInitial + (int) Math.pow(loop, 2);
-        /*
-         * We have found a matching stringInteger, so we can add it to this
-         * position in the hash table. We already know that index 0 is occupied,
-         * so we can start at 1 to find an open position.
-         */
-        if (stringInteger == this.hashes[hashProbe]) {
-            for (int stringLoop = 1;
-            stringLoop < this.arraySize;
-            stringLoop++
-            ) {
-                if (null == this.hashArray[hashProbe][stringLoop]) {
-                    this.hashArray[hashProbe][stringLoop] = input;
-                    return;
-                }
+    }
+    /*
+     * We have found a matching stringInteger, so we can add it to this
+     * position in the hash table. We already know that index 0 is occupied,
+     * so we can start at 1 to find an open position.
+     */
+    if (stringInteger == this.hashes[hashProbe]) {
+        for (int stringLoop = 1;
+        stringLoop < this.arraySize;
+        stringLoop++
+        ) {
+            if (null == this.hashArray[hashProbe][stringLoop]) {
+                this.hashArray[hashProbe][stringLoop] = input;
+                return;
             }
         }
-        /*
-         * We can insert the first string in a series if we have found a blank
-         * initial index in the hash table.
-         */
-        if (0 == this.hashes[hashProbe]) {
-            this.hashes[hashProbe]       = stringInteger;
-            this.hashArray[hashProbe][0] = input;
-            return;
-        }
+    }
+    /*
+     * We can insert the first string in a series if we have found a blank
+     * initial index in the hash table.
+     */
+    if (0 == this.hashes[hashProbe]) {
+        this.hashes[hashProbe]       = stringInteger;
+        this.hashArray[hashProbe][0] = input;
+        return;
     }
 }
   // -------------------------------------------------------------
