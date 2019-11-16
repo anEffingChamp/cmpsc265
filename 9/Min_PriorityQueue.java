@@ -98,11 +98,10 @@ public class Min_PriorityQueue
         }
         this.heapArray[target] = targetNode;
     }
-    // -------------------------------------------------------------
     /**
-     * remove() checks the leaf nodes of the tree for a maximum value. All interior
-     * nodes have children, so they can not logically be the maximum.
-     * https://stackoverflow.com/questions/22703549/finding-max-element-in-a-min-heap
+     * remove() removes the root node. Then it finds the last node in the binary
+     * tree, positions it at the root node, and lets it sink down to a new
+     * position to maintain the heap.
      */
     public Node remove()
     {
