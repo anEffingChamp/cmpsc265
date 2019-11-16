@@ -80,35 +80,43 @@ public void insert(String input) // insert a DataItem
      * We convert the string to an integer first.
      */
     int stringInteger = this.hashFunc(input);
-    int hashedValue   = stringInteger % this.arraySize;
-    /*
-     * We have found a matching stringInteger, so we can add it to this position
-     * in the hash table. We already know that index 0 is occupied, so we can
-     * start at 1 to find an open position.
+    int hashInitial   = stringInteger % this.arraySize;
+    /**
+     * Lets find an appropriate position using quadratic increments.
      */
-    if (stringInteger == this.hashes[hashedValue]) {
-        for (int loop = 1;
-        loop < this.arraySize;
-        loop++
-        ) {
-            if (null == this.hashArray[hashedValue][loop]) {
-                this.hashArray[hashedValue][loop] = input;
-                return;
+    int loop      = -1;
+    int hashProbe = hashInitial;
+    while (0          != this.hashes[hashProbe]
+    &&  stringInteger != this.hashes[hashProbe]
+    ) {
+        loop++;
+        hashProbe = hashInitial + (int) Math.pow(loop, 2);
+        /*
+         * We have found a matching stringInteger, so we can add it to this
+         * position in the hash table. We already know that index 0 is occupied,
+         * so we can start at 1 to find an open position.
+         */
+        if (stringInteger == this.hashes[hashProbe]) {
+            for (int stringLoop = 1;
+            stringLoop < this.arraySize;
+            stringLoop++
+            ) {
+                if (null == this.hashArray[hashProbe][stringLoop]) {
+                    this.hashArray[hashProbe][stringLoop] = input;
+                    return;
+                }
             }
         }
+        /*
+         * We can insert the first string in a series if we have found a blank
+         * initial index in the hash table.
+         */
+        if (0 == this.hashes[hashProbe]) {
+            this.hashes[hashProbe]       = stringInteger;
+            this.hashArray[hashProbe][0] = input;
+            return;
+        }
     }
-    /*
-     * We can insert the first string in a series if we have found a blank
-     * initial index in the hash table.
-     */
-    if (0 == this.hashes[hashedValue]) {
-        this.hashes[hashedValue]       = stringInteger;
-        this.hashArray[hashedValue][0] = input;
-    }
-    /**
-     * Otherwise we need to keep looking, using linear increments to find an
-     * open position.
-     */
 }
   // -------------------------------------------------------------
 
@@ -136,5 +144,6 @@ public static void main(String[] args) throws IOException
     for (String element: userInput) {
         anagramTable.insert(element);
     }
+    anagramTable.displayTable();
 }
 }
