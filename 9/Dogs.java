@@ -28,7 +28,8 @@ public String dogs;
 public Dogs(int size)       // constructor
 {
     arraySize = size;
-    hashArray = new String[arraySize];
+    this.hashArray = new String[arraySize];
+    this.hashes    = new int[size];
 }
 /**
  * displayTable() now checks whether there are any chihuahua characters in a
@@ -111,6 +112,9 @@ public String find(String input) // find item with key
 {
     int stringInteger = this.hashFunc(input);
     int hashInitial   = stringInteger % this.arraySize;
+    System.out.println(input);
+    System.out.println(stringInteger);
+    System.out.println(hashInitial);
     /**
      * Lets find an appropriate position using quadratic increments.
      */
@@ -122,6 +126,7 @@ public String find(String input) // find item with key
         loop++;
         hashProbe = hashInitial + (int) Math.pow(loop, 2);
     }
+    this.hashes[hashProbe] = stringInteger;
     return String.valueOf(hashProbe);
 }
 public static void main(String[] args) throws IOException
