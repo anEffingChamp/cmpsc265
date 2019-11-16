@@ -101,9 +101,6 @@ public Node remove()
     loop < this.currentSize;
     loop++
     ) {
-        if (null == this.heapArray[loop]) {
-            break;
-        }
         /*
          * We identify the highest value in the loop through the leaf nodes.
          */
@@ -118,13 +115,12 @@ public Node remove()
      * can we nullify that Node, and return it for further processing.
      */
     this.heapArray[removalIndex] = null;
-    for (int loop = removalIndex + 1;
+    for (int loop = removalIndex;
     loop < this.currentSize;
     loop++
     ) {
-        int nodeValue        = this.heapArray[loop].iData;
-        this.heapArray[loop] = null;
-        this.insert(nodeValue);
+        this.heapArray[loop] = this.heapArray[removalIndex + 1];
+        this.trickleUp(removalIndex + 1);
     }
     this.currentSize--;
     return output;
