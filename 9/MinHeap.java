@@ -87,50 +87,42 @@ public void trickleUp(int input)
     this.heapArray[target] = targetNode;
 }
 // -------------------------------------------------------------
-// delete item with max key. Return the reference to the deleted node.
 /**
  * remove() checks the leaf nodes of the tree for a maximum value. All interior
  * nodes have children, so they can not logically be the maximum.
  * https://stackoverflow.com/questions/22703549/finding-max-element-in-a-min-heap
  */
 public Node remove()
-{                           // (assumes non-empty list)
-    int removalIndex = this.currentSize / 2;
-    Node output      = this.heapArray[removalIndex];
-    for (int loop = removalIndex + 1;
-    loop < this.currentSize;
-    loop++
-    ) {
-        /*
-         * We identify the highest value in the loop through the leaf nodes.
-         */
-        if (this.heapArray[loop].iData > output.iData) {
-            removalIndex = loop;
-            output       = this.heapArray[loop];
-        }
-    }
-    /*
-     * Once we have the removalIndex, we have a few things to do. We need
-     * to reinsert all subsequent nodes to maintain the heap. Only then
-     * can we nullify that Node, and return it for further processing.
-     */
-    this.heapArray[removalIndex] = null;
-    for (int loop = removalIndex;
-    loop < this.currentSize;
-    loop++
-    ) {
-        this.heapArray[loop] = this.heapArray[removalIndex + 1];
-        this.trickleUp(removalIndex + 1);
-    }
-    this.currentSize--;
+{
+    Node output       = this.heapArray[0];
+    this.heapArray[0] = this.heapArray[--this.currentSize];
+    this.trickleDown(0);
     return output;
 }
 /**
  * trickleDown() finds a new position for a Node if we need to replace it.
  */
-public void trickleDown(int index)
+public void trickleDown(int input)
 {
-
+    int leftChild   = (input * 2) + 1;
+    int targetIndex = input;
+    Node inputNode  = this.heapArray[input];
+    if (input < this.currentSize / 2) {
+        /*
+         * Which child is smaller? That is the one we need.
+         */
+        targetIndex = leftChild + 1;
+        if (this.heapArray[leftChild].getKey()
+            < this.heapArray[leftChild + 1].getKey()
+        ) {
+            targetIndex = leftChild;
+        }
+    }
+    if (inputNode.getKey() > this.heapArray[targetIndex].getKey()) {
+        this.heapArray[input]       = this.heapArray[targetIndex];
+        this.heapArray[targetIndex] = inputNode;
+        this.trickleDown(targetIndex);
+    }
 }
 // -------------------------------------------------------------
 public void displayHeap()
