@@ -58,7 +58,7 @@ public boolean insert(int key)
      * Otherwise we insert the node at the end of the heap, and find its proper
      * position after the fact.
      */
-    this.heapArray[currentSize] = new Node(key);
+    this.heapArray[this.currentSize] = new Node(key);
     this.trickleUp(this.currentSize++);
     return true;
 }
@@ -71,20 +71,22 @@ public boolean insert(int key)
 public void trickleUp(int input)
 {
     /*
+     * We can skip processing if we are at the root node.
+     */
+    if (0 == input) {
+        return;
+    }
+    /*
      * In a heap the index of the parent node will consistently be half that of
      * a given input node. So lets start with that.
      */
     int parent      = (input - 1) / 2;
-    int target      = input;
-    Node targetNode = this.heapArray[target];
-    while (target > 0
-    &&  this.heapArray[parent].getKey() > this.heapArray[target].getKey()
-    ) {
-        this.heapArray[parent] = this.heapArray[target];
-        target = parent;
-        parent = (target - 1) / 2;
+    if (this.heapArray[input].getKey() < this.heapArray[parent].getKey()) {
+        Node placeholder       = this.heapArray[parent];
+        this.heapArray[parent] = this.heapArray[input];
+        this.heapArray[input]  = placeholder;
+        this.trickleUp(parent);
     }
-    this.heapArray[target] = targetNode;
 }
 /**
  * remove() removes the root node. Then it finds the last node in the binary
