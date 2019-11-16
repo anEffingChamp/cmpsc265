@@ -53,21 +53,41 @@ public boolean insert(int key)
      * We can insert the root node if the heap is currently empty. No other
      * comparisons are necessary.
      */
-    if (null == this.heapArray[0]) {
-        this.heapArray[0] = newNode;
-        return false;
+    if (true == this._insertNode(newNode, 0)) {
+        return true;
     }
     if (key >= this.heapArray[0].iData) {
-        if (null == this.heapArray[1]) {
-            this.heapArray[1] = newNode;
+        if (true == this._insertNode(newNode, 1)) {
+            return true;
         }
-        this.heapArray[2] = newNode;
+        if (true == this._insertNode(newNode, 2)) {
+            return true;
+        }
+        return false;
     }
     /*
      * On the other hand, we need to replace the root node if the value is less
-     * than it, and find a new position for what what previously the root node.
+     * than it, and find a new position for what what was previously the root
+     * node.
      */
+    Node rootNode     = this.heapArray[0];
+    this.heapArray[0] = newNode;
+    this.insert(rootNode.iData);
     return false;
+}
+/**
+ * _insertNode() attempts to insert a node at a given position, defined by
+ * inputIndex. It returns true when successful, and false otherwise.
+ */
+private boolean _insertNode(Node inputNode, int inputIndex)
+{
+    boolean output = false;
+    if (null == this.heapArray[inputIndex]) {
+        this.heapArray[inputIndex] = inputNode;
+        this.currentSize++;
+        output = true;
+    }
+    return output;
 }
 // -------------------------------------------------------------
 public void trickleUp(int index) {
@@ -75,17 +95,46 @@ public void trickleUp(int index) {
 }
 
 // -------------------------------------------------------------
-public Node remove()           // delete item with max key. Return the reference to the deleted node.
-    {                           // (assumes non-empty list)
-    // YOUR CODES
-    return null;  // for compilation. you need to change it.
+// delete item with max key. Return the reference to the deleted node.
+/**
+ * remove() checks the leaf nodes of the tree for a maximum value. All interior
+ * nodes have children, so they can not logically be the maximum.
+ * https://stackoverflow.com/questions/22703549/finding-max-element-in-a-min-heap
+ */
+public Node remove()
+{                           // (assumes non-empty list)
+    int removalIndex = this.currentSize / 2;
+    Node output      = this.heapArray[removalIndex];
+    for (int loop = removalIndex + 1;
+    loop < this.currentSize;
+    loop++
+    ) {
+        if (null == this.heapArray[loop]) {
+            break;
+        }
+        /*
+         * We identify the highest value in the loop through the leaf nodes.
+         */
+        if (this.heapArray[loop].iData > output.iData) {
+            removalIndex = loop;
+            output       = this.heapArray[loop];
+        }
+    }
+    /*
+     * Once we have the removalIndex, we can nullify that Node, and return it
+     * for further processing.
+     */
+    this.currentSize--;
+    this.heapArray[removalIndex] = null;
+    return output;
+}
+/**
+ * trickleDown() finds a new position for a Node if we need to replace it.
+ */
+public void trickleDown(int index)
+{
 
 }
-// -------------------------------------------------------------
-public void trickleDown(int index) {
-    // YOUR CODES
-}
-
 // -------------------------------------------------------------
 public void displayHeap()
 {
