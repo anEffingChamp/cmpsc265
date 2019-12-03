@@ -198,6 +198,38 @@ public boolean hasCycle() {
     // YOUR CODES
     return false; // for compilation. You need to change it.
 }
+/**
+ * printConnectedComponents() lets a graph print the connected components as
+ * parsed by Graph::detectConnectedComponent().
+ */
+public void printConnectedComponents()
+{
+    ArrayList<ArrayList<Integer>> vertexComponents =
+        this.detectConnectedComponent();
+    System.out.println("");
+    System.out.println(
+        "There are " + vertexComponents.size()
+        + " connected components in this graph. They are:"
+    );
+    for (int loop = 0;
+    loop < vertexComponents.size();
+    loop++
+    ) {
+        System.out.print("Connected component " + loop + ": [");
+        ArrayList<Integer> component = vertexComponents.get(loop);
+        for (int loopComponent = 0;
+        loopComponent < component.size();
+        loopComponent++
+        ) {
+            String componentSeparator = ", ";
+            if (0 == loopComponent) {
+                componentSeparator = "";
+            }
+            System.out.print(componentSeparator + component.get(loopComponent));
+        }
+        System.out.println("]");
+    }
+}
 
 public static void main(String[] args) {
     Graph theGraph1 = new Graph();
@@ -247,26 +279,8 @@ public static void main(String[] args) {
      * Your codes on detecting connected components
      * on Graph theGraph1 and theGraph2
      */
-    ArrayList<ArrayList<Integer>> vertexComponents =
-        theGraph1.detectConnectedComponent();
-    for (int loop = 0;
-    loop < vertexComponents.size();
-    loop++
-    ) {
-        System.out.print("Connected component " + loop + ": [");
-        ArrayList<Integer> component = vertexComponents.get(loop);
-        for (int loopComponent = 0;
-        loopComponent < component.size();
-        loopComponent++
-        ) {
-            String componentSeparator = ", ";
-            if (0 == loopComponent) {
-                componentSeparator = "";
-            }
-            System.out.print(componentSeparator + component.get(loopComponent));
-        }
-        System.out.println("]");
-    }
+    theGraph1.printConnectedComponents();
+    theGraph2.printConnectedComponents();
     /*
      * Your codes on finding a path on Graph theGraph1
      */
