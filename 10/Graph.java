@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Stack;
@@ -151,9 +152,7 @@ public ArrayList<ArrayList<Integer>> detectConnectedComponent()
      * a fresh start when traversing the graph. We can also initialize our
      * output variable, and prepare to assign things.
      */
-    for (int j = 0; j < nVerts; j++) {
-        vertexList[j].wasVisited = false;
-    }
+    this._resetGraph();
     ArrayList<ArrayList<Integer>> output = new ArrayList<ArrayList<Integer>>();
     int vertexCount                      = 0;
     /*
@@ -183,12 +182,47 @@ private ArrayList<Integer> detectConnectedComponent(int input)
     }
     return output;
 }
-/*
- * Detect whether there is a path between two given nodes.
+/**
+ * Please finish definition of the findPath()method within the GraphProcess
+ * class, so that given two vertices, itcan detect whether there exists a path
+ * them, and therefore they are connected.
+ * For example, on the following figure, vertex aand bare connected, but vertex
+ * a and f are not
+ * You can apply the idea of either DFS or BFS to implement this.  If two
+ * vertices are connected, staring DFS or BFS on either onenode can reach the
+ * other.
  */
-public boolean findPath(int start, int end){
-    // YOUR CODES
-    return false;  //For compilation. You need to change it.
+// TODO Am I supposed to divide the graph into components? The example in the
+// problem description says yes, but the text of the problem says no. In this
+// case, the answer will always be true, because all nodes in a single graph are
+// connected.
+public boolean findPath(int start, int end)
+{
+    this._resetGraph();
+    return this._findPath(start, end);
+}
+private boolean _findPath(int start, int end)
+{
+    this.vertexList[start].wasVisited = true;
+    while (-1 != this.getAdjUnvisitedVertex(start)) {
+        if (end  == this.getAdjUnvisitedVertex(start)
+        ||  true == this._findPath(this.getAdjUnvisitedVertex(start), end)
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+/**
+ * _resetGraph() sets each vertex as if it had not been visited. This is
+ * necessary whenever we want to traverse the graph again in the same program
+ * run.
+ */
+private void _resetGraph()
+{
+    for (int j = 0; j < nVerts; j++) {
+        this.vertexList[j].wasVisited = false;
+    }
 }
 
 /*
@@ -284,7 +318,24 @@ public static void main(String[] args) {
     /*
      * Your codes on finding a path on Graph theGraph1
      */
-
+    Scanner userInput = new Scanner(System.in);
+    System.out.println("Please enter vertex 1: ");
+    String vertex1    = userInput.next();
+    System.out.println("Please enter vertex 2: ");
+    String vertex2    = userInput.next();
+    String connection = "not";
+    /*
+     * a corresponds to 0 in this object, so we need to subtract 97 from the
+     * ASCII value of the character.
+     */
+    if (true == theGraph1.findPath(
+        vertex1.charAt(0) - 97, vertex2.charAt(0) - 97
+    )) {
+        connection = "";
+    }
+    System.out.println(
+        "There is " + connection + " a connection between these vertices."
+    );
     /*
      * Your codes on finding cycle on Graph
      * theGraph1 and theGraph3
