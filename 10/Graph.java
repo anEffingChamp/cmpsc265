@@ -131,7 +131,6 @@ public int getAdjUnvisitedVertex(int v) {
             return j;
     return -1;
 } // end getAdjUnvisitedVertex()
-
 /*
  * The
  * attached GraphProcess.java file contains the definition for the Vertex Class
@@ -224,13 +223,31 @@ private void _resetGraph()
         this.vertexList[j].wasVisited = false;
     }
 }
-
-/*
- * Detect cycle on an undirected graph
+/**
+ * Please finish the implementation of method hasCycle()which can detect whether
+ * exists any cycle in an undirected graph.You can use a recursive DFS to
+ * implement this.  The basic algorithm is as:Start DFS, return true if you see
+ * a visited node thatis not your parent (calling node). If the search is
+ * doneand it dose not return true, return false.For example, the left graph
+ * contains a cycle, but the right one does not.
  */
-public boolean hasCycle() {
-    // YOUR CODES
-    return false; // for compilation. You need to change it.
+public boolean hasCycle()
+{
+    for (int loop = 0;
+    loop < this.nVerts;
+    loop++
+    ) {
+        this._resetGraph();
+        this.vertexList[loop].wasVisited     = true;
+        int nextNode                         = this.getAdjUnvisitedVertex(loop);
+        this.vertexList[nextNode].wasVisited = true;
+        if (-1   != this.getAdjUnvisitedVertex(loop)
+        &&  true == this._findPath(nextNode, this.getAdjUnvisitedVertex(loop))
+        ) {
+            return true;
+        }
+    }
+    return false;
 }
 /**
  * printConnectedComponents() lets a graph print the connected components as
@@ -340,6 +357,15 @@ public static void main(String[] args) {
      * Your codes on finding cycle on Graph
      * theGraph1 and theGraph3
      */
-
+    connection = " not ";
+    if (true == theGraph1.hasCycle()) {
+        connection = " ";
+    }
+    System.out.println("theGraph1 does" + connection + "have cycles.");
+    connection = " not ";
+    if (true == theGraph3.hasCycle()) {
+        connection = "";
+    }
+    System.out.println("theGraph3 does" + connection + "have cycles.");
 } // end main()
 }
