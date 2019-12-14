@@ -194,17 +194,27 @@ public void bellman_ford(int input)
             distance[loop] = this.adjMat[input][loop];
         }
     }
+    System.out.println("shortest path \t\t weight");
     for (int loop = 0;
     loop < this.nVerts;
     loop++
     ) {
         if (INFINITY != parent[loop]) {
             System.out.println(
-                this.vertexList[input].label + " -> "
-                + this.vertexList[loop].label
+                this.vertexList[input].label
+                + " -> " + this.vertexList[loop].label
+                + " \t\t\t " + distance[loop]
             );
         }
     }
+}
+/**
+ * Given an input vertex, denoted by its integer value, we find the closest
+ * parent.
+ */
+private int _shortestDistance(int input)
+{
+    return 1;
 }
 public void floyd_warshall(){
     int[][] distance = new int[nVerts][nVerts];
