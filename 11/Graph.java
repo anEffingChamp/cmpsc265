@@ -140,8 +140,10 @@ public void kruskalMST()
          */
         nextEdge = completeTree.remove();
         completeTree.poll();
+        // TODO Where do these phantom edges come from?
         System.out.println(
-            nextEdge.srcVert + " --- " + nextEdge.destVert
+            nextEdge.srcVert + " --- "
+            + nextEdge.destVert
             + ": " + nextEdge.distance
         );
     }
@@ -197,7 +199,10 @@ public void bellman_ford(int input)
     loop++
     ) {
         if (INFINITY != parent[loop]) {
-            System.out.println(input + " -> " + loop);
+            System.out.println(
+                this.vertexList[input].label + " -> "
+                + this.vertexList[loop].label
+            );
         }
     }
 }
