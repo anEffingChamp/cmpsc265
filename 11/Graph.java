@@ -93,15 +93,53 @@ public void displayVertex(int v) {
  */
 public void kruskalMST()
 {
-    double weight=0;   // weight of MST
-    /* Maintain edges in the MST in a queue
-     *
+    /*
+     * We will create a minimum priority queue of the edges so that we can find
+     * positions for them. completeTree will actually contain all edges in the
+     * tree, but we will only display those necessary for a minimum spanning
+     * tree.
      */
-    Queue<Edge> mst = new LinkedList<Edge>();  // edges in MST
-
-    // YOUR CODES
+    double weight                   = 0;   // weight of completeTree
+    PriorityQueue<Edge> completeTree = new PriorityQueue<Edge>();
+    for (int loop = 0;
+    loop < this.adjMat.length;
+    loop++
+    ) {
+        for (int innerLoop = 0;
+        innerLoop < this.adjMat[loop].length;
+        innerLoop++
+        ) {
+            /*
+             * Once we identify a weighted edge, we find its position in the
+             * minimum priority queue.
+             */
+            int edgeDistance = this.adjMat[loop][innerLoop];
+            completeTree.add(new Edge(loop, innerLoop, edgeDistance));
+        }
+    }
+    /*
+     * Once we have the queue, we can display the tree and see how much it
+     * weighs.
+     */
+    Edge nextEdge   = completeTree.remove();
+    completeTree.poll();
+    System.out.println("Minimum spanning tree:");
+    for (int loop = 0;
+    loop < completeTree.size() - 1;
+    loop++
+    ) {
+        /*
+         * We know that the completeTree will include each edge twice, so we can
+         * skip the next item. It will be the same edge.
+         */
+        nextEdge = completeTree.remove();
+        completeTree.poll();
+        System.out.println(
+            nextEdge.srcVert + " --- " + nextEdge.destVert
+            + ": " + nextEdge.distance
+        );
+    }
 }
-
 public void bellman_ford(int source){
     int[] distance = new int[nVerts];
     int[] parent = new int[nVerts];
