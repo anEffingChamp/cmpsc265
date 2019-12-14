@@ -102,7 +102,7 @@ public void kruskalMST()
     double weight                   = 0;   // weight of completeTree
     PriorityQueue<Edge> completeTree = new PriorityQueue<Edge>();
     for (int loop = 0;
-    loop < this.adjMat.length;
+    loop < this.nVerts;
     loop++
     ) {
         for (int innerLoop = 0;
@@ -114,6 +114,9 @@ public void kruskalMST()
              * minimum priority queue.
              */
             int edgeDistance = this.adjMat[loop][innerLoop];
+            if (0 == edgeDistance) {
+                continue;
+            }
             completeTree.add(new Edge(loop, innerLoop, edgeDistance));
         }
     }
@@ -124,10 +127,13 @@ public void kruskalMST()
     Edge nextEdge   = completeTree.remove();
     completeTree.poll();
     System.out.println("Minimum spanning tree:");
-    for (int loop = 0;
-    loop < completeTree.size() - 1;
-    loop++
-    ) {
+    /*
+     * Now we make a set of vertices for UnionFind{}. This will help us to find
+     * cycles.
+     */
+    //UnionFind union = new UnionFind(nextEdge.srcVert);
+    //union.union(nextEdge.srcVert, nextEdge.destVert);
+    while (0 != completeTree.size()) {
         /*
          * We know that the completeTree will include each edge twice, so we can
          * skip the next item. It will be the same edge.
@@ -140,14 +146,61 @@ public void kruskalMST()
         );
     }
 }
-public void bellman_ford(int source){
-    int[] distance = new int[nVerts];
-    int[] parent = new int[nVerts];
+/**
+ * Problem 2: Finding single-source shortest paths using Bellman- Ford algorithm
+ * (35)
+ * Description:
+ * Please finish the implementation of the method of bellman_ford(source) which
+ * finds and returns the shortest paths as well as the weights of the shortest
+ * paths from the source vertex to all other vertices on a connected undirected
+ * weighted graph.
+ * Bellman-Ford algorithm adopts dynamic programming, which uses a table
+ * (one-dimensional array of size N) to save distance to each node, initialize
+ * with infinity except for the source which is 0 distance from itself. It is an
+ * iterative solution, and needs to iterate N-1 (N here is the number of
+ * vertices in graph) times, in each iteration, it will look at all edges and
+ * see if you need to update distance from source (update table). For edge u->v
+ * do: D(v) = min[D(v), D(u) + w(u,v)].
+ *
+ */
+public void bellman_ford(int input)
+{
+    int[] distance         = new int[nVerts];
+    int[] parent           = new int[nVerts];
     String[] shortestPaths = new String[nVerts];
-
-    // YOUR CODES
+    /*
+     * We start with our source node, and map out the shortest distances to all
+     * directly linked nodes in the graph.
+     */
+    parent[input]   = input;
+    distance[input] = 0;
+    for (int loop = 0;
+    loop < this.nVerts;
+    loop++
+    ) {
+        if (input == loop) {
+            continue;
+        }
+        /*
+         * We initialize the distance for each node to the theoretical maximum,
+         * so that we have a decent starting point for finding the minimum.
+         */
+        parent[loop]   = INFINITY;
+        distance[loop] = INFINITY;
+        if (INFINITY != this.adjMat[input][loop]) {
+            parent[loop]   = input;
+            distance[loop] = this.adjMat[input][loop];
+        }
+    }
+    for (int loop = 0;
+    loop < this.nVerts;
+    loop++
+    ) {
+        if (INFINITY != parent[loop]) {
+            System.out.println(input + " -> " + loop);
+        }
+    }
 }
-
 public void floyd_warshall(){
     int[][] distance = new int[nVerts][nVerts];
     // YOUR CODES
