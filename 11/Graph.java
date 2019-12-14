@@ -123,22 +123,20 @@ public void kruskalMST()
     /*
      * Once we have the queue, we can display the tree and see how much it
      * weighs.
-     */
-    Edge nextEdge   = completeTree.remove();
-    completeTree.poll();
-    /*
      * Now we make a set of vertices for UnionFind{}. This will help us to find
      * cycles.
      */
-    //UnionFind union = new UnionFind(nextEdge.srcVert);
-    //union.union(nextEdge.srcVert, nextEdge.destVert);
+    UnionFind union = new UnionFind(this.nVerts);
     while (0 != completeTree.size()) {
         /*
          * We know that the completeTree will include each edge twice, so we can
          * skip the next item. It will be the same edge.
          */
-        nextEdge = completeTree.remove();
-        completeTree.poll();
+        Edge nextEdge = completeTree.remove();
+        if (union.find(nextEdge.srcVert) == union.find(nextEdge.destVert)) {
+            continue;
+        }
+        union.union(nextEdge.srcVert, nextEdge.destVert);
         // TODO Where do these phantom edges come from?
         System.out.println(
             this.vertexList[nextEdge.srcVert].label + " --- "
@@ -173,15 +171,10 @@ public void bellman_ford(int input)
      * We start with our source node, and map out the shortest distances to all
      * directly linked nodes in the graph.
      */
-    parent[input]   = input;
-    distance[input] = 0;
     for (int loop = 0;
     loop < this.nVerts;
     loop++
     ) {
-        if (input == loop) {
-            continue;
-        }
         /*
          * We initialize the distance for each node to the theoretical maximum,
          * so that we have a decent starting point for finding the minimum.
