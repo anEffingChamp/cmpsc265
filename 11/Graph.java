@@ -114,7 +114,7 @@ public void kruskalMST()
              * minimum priority queue.
              */
             int edgeDistance = this.adjMat[loop][innerLoop];
-            if (0 == edgeDistance) {
+            if (INFINITY == edgeDistance) {
                 continue;
             }
             completeTree.add(new Edge(loop, innerLoop, edgeDistance));
@@ -126,7 +126,6 @@ public void kruskalMST()
      */
     Edge nextEdge   = completeTree.remove();
     completeTree.poll();
-    System.out.println("Minimum spanning tree:");
     /*
      * Now we make a set of vertices for UnionFind{}. This will help us to find
      * cycles.
@@ -142,8 +141,8 @@ public void kruskalMST()
         completeTree.poll();
         // TODO Where do these phantom edges come from?
         System.out.println(
-            nextEdge.srcVert + " --- "
-            + nextEdge.destVert
+            this.vertexList[nextEdge.srcVert].label + " --- "
+            + this.vertexList[nextEdge.destVert].label
             + ": " + nextEdge.distance
         );
     }
