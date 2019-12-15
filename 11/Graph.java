@@ -91,7 +91,7 @@ public void displayVertex(int v) {
  */
 public void kruskalMST()
 {
-    PriorityQueue<Edge> completeTree = this._getKruskalTree();
+    PriorityQueue<Edge> completeTree = this._getKruskalTree(false);
     /*
      * Once we have the queue, we can display the tree and see how much it
      * weighs.
@@ -111,7 +111,7 @@ public void kruskalMST()
  * tree, but we will only display those necessary for a minimum spanning
  * tree.
  */
-private PriorityQueue<Edge> _getKruskalTree()
+private PriorityQueue<Edge> _getKruskalTree(boolean input)
 {
     PriorityQueue<Edge> completeTree = new PriorityQueue<Edge>();
     for (int loop = 0;
@@ -132,6 +132,9 @@ private PriorityQueue<Edge> _getKruskalTree()
             }
             completeTree.add(new Edge(loop, innerLoop, edgeDistance));
         }
+    }
+    if (true == input) {
+        return completeTree;
     }
     /*
      * Once we have the queue, we can display the tree and see how much it
@@ -174,7 +177,7 @@ private PriorityQueue<Edge> _getKruskalTree()
  */
 public void bellman_ford(int input)
 {
-    this.minimumTree = this._getKruskalTree();
+    this.minimumTree = this._getKruskalTree(false);
     /*
      * Lets write the heritage of our minimum spanning tree to our Bellman Ford
      * arrays, and see what happens.
@@ -246,8 +249,17 @@ private LinkedList<Integer> _findShortestPath(int source, int destination)
  */
 public void floyd_warshall()
 {
-    int[][] distance = new int[nVerts][nVerts];
-    // YOUR CODES
+    /*
+     * We get the minimum tree again, but we allow cycles this time. This gives
+     * us the complete tree, but with edges ranked by priority.
+     */
+    this.minimumTree = this._getKruskalTree(true);
+    for (int loop = 0;
+    loop < this.nVerts;
+    loop++
+    ) {
+        this.bellman_ford(loop);
+    }
 }
 public static void main(String[] args) {
     // Problem 1
