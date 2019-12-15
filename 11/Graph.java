@@ -2,16 +2,14 @@ import java.util.*;
 
 public class Graph
 {
-private final int MAX_VERTS = 20;
-private final int INFINITY = 1000000;
 private Vertex vertexList[]; // list of vertices
 private int adjMat[][]; // adjacency matrix
 private int nVerts; // current number of vertices
-
-//private int currentVert;
-//private int nTree; // number of verts in tree
-// -------------------------------------------------------------
-
+private final int MAX_VERTS   = 20;
+private final int INFINITY    = 1000000;
+private int[] bellmanDistance = new int[MAX_VERTS];
+private int[] bellmanParent   = new int[MAX_VERTS];
+private PriorityQueue<Edge> minimumTree;
 private static class Vertex {
     public char label; // label (e.g. 'A')
     public boolean isInTree;
@@ -176,40 +174,67 @@ private PriorityQueue<Edge> _getKruskalTree()
  */
 public void bellman_ford(int input)
 {
-    int[] distance                  = new int[nVerts];
-    int[] parent                    = new int[nVerts];
-    String[] shortestPaths          = new String[nVerts];
-    PriorityQueue<Edge> minimumTree = this._getKruskalTree();
+    this.minimumTree = this._getKruskalTree();
     /*
      * Lets write the heritage of our minimum spanning tree to our Bellman Ford
      * arrays, and see what happens.
      */
     while (0 != minimumTree.size()) {
-        Edge nextEdge               = minimumTree.remove();
-        parent[nextEdge.destVert]   = nextEdge.srcVert;
-        distance[nextEdge.destVert] = nextEdge.distance;
+        Edge nextEdge                           = minimumTree.remove();
+        this.bellmanParent[nextEdge.destVert]   = nextEdge.srcVert;
+        this.bellmanDistance[nextEdge.destVert] = nextEdge.distance;
     }
-    System.out.println("shortest path \t\t weight");
+    System.out.println("shortest path \t\t\t weight");
+    /*
+     * We need to find the immediate children for the input vertex, and see how
+     * far that gets us. Depending upon where the input is in the minimum
+     * spanning tree, only a subtree may be accessible since this is a directed
+     * graph.
+     */
     for (int loop = 0;
     loop < this.nVerts;
     loop++
     ) {
-        if (INFINITY != parent[loop]) {
-            System.out.println(
-                this.vertexList[input].label
-                + " -> " + this.vertexList[loop].label
-                + " \t\t\t " + distance[loop]
-            );
+        LinkedList<Integer> output = this._findShortestPath(input, loop);
+        Integer result             = output.removeFirst();
+        int weight                 = 0;
+        if (-1 == result) {
+            continue;
         }
+        System.out.print(this.vertexList[result].label);
+        weight += this.bellmanDistance[result];
+        while (0 != output.size()) {
+            result  = output.removeFirst();
+            weight += this.bellmanDistance[result];
+            System.out.print(" -> " + this.vertexList[result].label);
+        }
+        System.out.println(" \t\t\t\t " + weight);
     }
 }
 /**
- * Given an input vertex, denoted by its integer value, we find the closest
- * parent.
+ * _findShortestPath() accepts a source, and destination as arguments. Then it
+ * finds the shortest distance between them in the object minimum spanning tree.
  */
-private int _shortestDistance(int input)
+private LinkedList<Integer> _findShortestPath(int source, int destination)
 {
-    return 1;
+    LinkedList<Integer> output = new LinkedList<Integer>();
+    if (this.bellmanParent[destination] == source) {
+        output.addFirst(destination);
+        output.addFirst(source);
+        return output;
+    }
+    /*
+     * Our source is only part of the subtree, and we requested a node beyond
+     * its reach. Lets flag it so that the calling function knows to ignore this
+     * result.
+     */
+    if (this.bellmanParent[destination] == destination) {
+        output.addFirst(-1);
+        return output;
+    }
+    output = this._findShortestPath(source, this.bellmanParent[destination]);
+    output.addLast(destination);
+    return output;
 }
 /**
  * Floyd_Warshall is an algorithm for finding all pairs shortest paths in a
