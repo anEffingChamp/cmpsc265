@@ -93,13 +93,28 @@ public void displayVertex(int v) {
  */
 public void kruskalMST()
 {
+    PriorityQueue<Edge> completeTree = this._getKruskalTree();
     /*
-     * We will create a minimum priority queue of the edges so that we can find
-     * positions for them. completeTree will actually contain all edges in the
-     * tree, but we will only display those necessary for a minimum spanning
-     * tree.
+     * Once we have the queue, we can display the tree and see how much it
+     * weighs.
      */
-    double weight                   = 0;   // weight of completeTree
+    while (0 != completeTree.size()) {
+        Edge nextEdge = completeTree.remove();
+        System.out.println(
+            this.vertexList[nextEdge.srcVert].label + " --- "
+            + this.vertexList[nextEdge.destVert].label
+            + ": " + nextEdge.distance
+        );
+    }
+}
+/**
+ * We will create a minimum priority queue of the edges so that we can find
+ * positions for them. completeTree will actually contain all edges in the
+ * tree, but we will only display those necessary for a minimum spanning
+ * tree.
+ */
+private PriorityQueue<Edge> _getKruskalTree()
+{
     PriorityQueue<Edge> completeTree = new PriorityQueue<Edge>();
     for (int loop = 0;
     loop < this.nVerts;
@@ -126,7 +141,8 @@ public void kruskalMST()
      * Now we make a set of vertices for UnionFind{}. This will help us to find
      * cycles.
      */
-    UnionFind union = new UnionFind(this.nVerts);
+    UnionFind union            = new UnionFind(this.nVerts);
+    PriorityQueue<Edge> output = new PriorityQueue<Edge>();
     while (0 != completeTree.size()) {
         /*
          * We know that the completeTree will include each edge twice, so we can
@@ -137,13 +153,9 @@ public void kruskalMST()
             continue;
         }
         union.union(nextEdge.srcVert, nextEdge.destVert);
-        // TODO Where do these phantom edges come from?
-        System.out.println(
-            this.vertexList[nextEdge.srcVert].label + " --- "
-            + this.vertexList[nextEdge.destVert].label
-            + ": " + nextEdge.distance
-        );
+        output.add(nextEdge);
     }
+    return output;
 }
 /**
  * Problem 2: Finding single-source shortest paths using Bellman- Ford algorithm
@@ -164,9 +176,10 @@ public void kruskalMST()
  */
 public void bellman_ford(int input)
 {
-    int[] distance         = new int[nVerts];
-    int[] parent           = new int[nVerts];
-    String[] shortestPaths = new String[nVerts];
+    int[] distance                  = new int[nVerts];
+    int[] parent                    = new int[nVerts];
+    String[] shortestPaths          = new String[nVerts];
+    PriorityQueue<Edge> minimumTree = this._getKruskalTree();
     /*
      * We start with our source node, and map out the shortest distances to all
      * directly linked nodes in the graph.
@@ -175,15 +188,25 @@ public void bellman_ford(int input)
     loop < this.nVerts;
     loop++
     ) {
+        if (loop == input) {
+            parent[loop]   = input;
+            distance[loop] = 0;
+        }
         /*
          * We initialize the distance for each node to the theoretical maximum,
-         * so that we have a decent starting point for finding the minimum.
+         * so that we have a decent starting point for finding the minimum. Then
+         * we find the nearest parent for that node.
          */
         parent[loop]   = INFINITY;
         distance[loop] = INFINITY;
-        if (INFINITY != this.adjMat[input][loop]) {
-            parent[loop]   = input;
-            distance[loop] = this.adjMat[input][loop];
+        for (int innerLoop = 0;
+        loop < this.nVerts;
+        loop++
+        ) {
+            if (distance[innerLoop] > this.adjMat[loop][innerLoop]) {
+                parent[innerLoop] = loop;
+                distance[loop]    = this.adjMat[loop][innerLoop];
+            }
         }
     }
     System.out.println("shortest path \t\t weight");
@@ -208,11 +231,19 @@ private int _shortestDistance(int input)
 {
     return 1;
 }
-public void floyd_warshall(){
+/**
+ * Floyd_Warshall is an algorithm for finding all pairs shortest paths in a
+ * weighted graph with positive or negative edge weights (but with no
+ *
+ *  negative cycles). Its basic idea is to one by one pick all vertices and
+ *  updates all shortest paths that include the picked vertex as an intermediate
+ *  vertex in the shortest path.
+ */
+public void floyd_warshall()
+{
     int[][] distance = new int[nVerts][nVerts];
     // YOUR CODES
 }
-
 public static void main(String[] args) {
     // Problem 1
     Graph theGraph1 = new Graph();
