@@ -181,33 +181,13 @@ public void bellman_ford(int input)
     String[] shortestPaths          = new String[nVerts];
     PriorityQueue<Edge> minimumTree = this._getKruskalTree();
     /*
-     * We start with our source node, and map out the shortest distances to all
-     * directly linked nodes in the graph.
+     * Lets write the heritage of our minimum spanning tree to our Bellman Ford
+     * arrays, and see what happens.
      */
-    for (int loop = 0;
-    loop < this.nVerts;
-    loop++
-    ) {
-        if (loop == input) {
-            parent[loop]   = input;
-            distance[loop] = 0;
-        }
-        /*
-         * We initialize the distance for each node to the theoretical maximum,
-         * so that we have a decent starting point for finding the minimum. Then
-         * we find the nearest parent for that node.
-         */
-        parent[loop]   = INFINITY;
-        distance[loop] = INFINITY;
-        for (int innerLoop = 0;
-        loop < this.nVerts;
-        loop++
-        ) {
-            if (distance[innerLoop] > this.adjMat[loop][innerLoop]) {
-                parent[innerLoop] = loop;
-                distance[loop]    = this.adjMat[loop][innerLoop];
-            }
-        }
+    while (0 != minimumTree.size()) {
+        Edge nextEdge               = minimumTree.remove();
+        parent[nextEdge.destVert]   = nextEdge.srcVert;
+        distance[nextEdge.destVert] = nextEdge.distance;
     }
     System.out.println("shortest path \t\t weight");
     for (int loop = 0;
